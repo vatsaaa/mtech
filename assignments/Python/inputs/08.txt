@@ -1,0 +1,21 @@
+Text Processing is one of the most common task in many ML applications. Below are some examples of such applications.
+
+• Language Translation: Translation of a sentence from one language to another.
+• Sentiment Analysis: To determine, from a text corpus, whether the  sentiment towards any topic or product etc. is positive, negative, or neutral.
+• Spam Filtering:  Detect unsolicited and unwanted email/messages.
+
+Courtesy (sigmoidal)
+These applications deal with huge amount of text to perform classification or translation and involves a lot of work on the back end. Transforming text into something an algorithm can digest is a complicated process. In this article, we will discuss the steps involved in text processing.
+
+Step 1 : Data Preprocessing
+Tokenization — convert sentences to words
+Removing unnecessary punctuation, tags
+Removing stop words — frequent words such as ”the”, ”is”, etc. that do not have specific semantic
+Stemming — words are reduced to a root by removing inflection through dropping unnecessary characters, usually a suffix.
+Lemmatization — Another approach to remove inflection by determining the part of speech and utilizing detailed database of the language.
+The stemmed form of studies is: studi
+The stemmed form of studying is: study
+The lemmatized form of studies is: study
+The lemmatized form of studying is: study
+Thus stemming & lemmatization help reduce words like ‘studies’, ‘studying’ to a common base form or root word ‘study’. For detailed discussion on Stemming & Lemmatization refer here . Note that not all the steps are mandatory and is based on the application use case. For Spam Filtering we may follow all the above steps but may not for language translation problem.
+
