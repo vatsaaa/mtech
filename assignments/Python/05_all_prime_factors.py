@@ -21,13 +21,14 @@ def find_primes_upto(numb: int):
 def main():
     input_num = int(input("Please enter the number whose prime factors are required: "))
 
-    primes_to = find_primes_upto(input_num)
+    primes_upto = find_primes_upto(input_num)
 
     prime_factors = []
 
-    for p in primes_to:
-        if(input_num % p == 0):
+    for p in primes_upto:
+        while(input_num % p == 0 and input_num != 1):
             prime_factors.append(p)
+            input_num = input_num // p
     
     print(prime_factors)
 
