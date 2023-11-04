@@ -1,6 +1,7 @@
 # Folder structure
 
-
+# How to
+Use VS Code to edit and run code
 
 # References and Good Reads
 - [Visual Studio Code - Settings](https://code.visualstudio.com/docs/getstarted/settings)

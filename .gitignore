@@ -1,0 +1,11 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+
+# Ignore .venv directory
+.venv/
+
+# PyCharm files
+.idea/
+
+# VSCode files
+.vscode/
