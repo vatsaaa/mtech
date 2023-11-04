@@ -12,3 +12,5 @@ iris_df['target'] = iris.target
 
 sb.pairplot(iris_df, hue='target')
 mp.pyplot.show()
+
+# https://scikit-learn.org/stable/auto_examples/index.html
