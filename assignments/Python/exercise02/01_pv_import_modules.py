@@ -8,9 +8,27 @@ import scipy as sp
 iris = datasets.load_iris()
 
 iris_df = pd.DataFrame(iris.data, columns=iris.feature_names)
-iris_df['target'] = iris.target
 
-sb.pairplot(iris_df, hue='target')
-mp.pyplot.show()
+# Print the first 3 rows
+print(iris_df.head(3))
 
-# https://scikit-learn.org/stable/auto_examples/index.html
+# Glance over some statistics about the iris-data
+print("====================================================================================================")
+print("Describing iris-data: \n", iris_df.describe())
+
+# Print the column names of the iris-data
+print("====================================================================================================")
+print("Columns names in iris-data are: \n", iris_df.columns)
+
+# Plot  the  distribution  of  all  numerical  features  and  the categorical target using matplotlib and observe the plots
+print("====================================================================================================")
+print("Plotting the distribution of all numerical features and the categorical target using matplotlib")
+iris_df.hist()
+# mp.pyplot.show()
+
+# Plot a “feature pair-wise” scatter plot to see how the numerical features are correlated to each other and print out the pairwise correlation coefficients between the numerical features
+print("====================================================================================================")
+print("Plotting a feature pair-wise scatter plot to see how the numerical features are correlated to each other")
+sb.pairplot(iris_df)
+wait = input("PRESS ENTER TO CONTINUE.")
+# mp.pyplot.show()
