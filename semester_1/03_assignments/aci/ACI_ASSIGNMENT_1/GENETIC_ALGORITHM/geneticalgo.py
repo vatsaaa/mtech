@@ -1,9 +1,7 @@
 import random
 
-## Import project libraries
-from utils.grid import grid
-
 ## Import project files
+from utils.grid import grid
 from utils.GridEnvironment import GridEnvironment
 
 class Individual:
@@ -48,7 +46,7 @@ def mutate(individual, grid_env, mutation_rate):
             adjacent_cells = grid_env.get_adjacent_cells(*individual.path[i])
             individual.path[i] = random.choice(adjacent_cells)
 
-def genetic_algorithm(grid_env, population_size=10, mutation_rate=0.01, generations=100):
+def genetic_algorithm(grid_env: GridEnvironment, population_size: int = 10, mutation_rate: float = 0.01, generations: int = 100):
     population = [create_individual(grid_env) for _ in range(population_size)]
 
     for generation in range(generations):
@@ -84,7 +82,3 @@ def genetic_algorithm(grid_env, population_size=10, mutation_rate=0.01, generati
     print("Final path:", path)
     print("Total cost:", cost)
     return path, cost
-
-env = GridEnvironment(grid)
-genetic_algorithm(env)
-

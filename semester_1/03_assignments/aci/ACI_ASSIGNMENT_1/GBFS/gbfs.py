@@ -1,8 +1,5 @@
 ## Import standard python libraries
-import heapq, pprint
-
-## Import project libraries
-from utils.grid import grid
+import heapq
 
 ## Import project files
 from utils.GridEnvironment import GridEnvironment
@@ -41,12 +38,4 @@ def greedy_best_first_search(grid_env: GridEnvironment):
                 print("Priority of next cell", priority)
                 heapq.heappush(pq, (priority, next_cell))
                 came_from[next_cell] = current
-
-if __name__ == "__main__":
-    env = GridEnvironment(grid)
-    pprint.pprint(env.grid) # Print the grid
-    
-    path, total_cost = greedy_best_first_search(env)
-    print("Path taken by the agent:",path)
-    print("Total path cost:", total_cost)
 
