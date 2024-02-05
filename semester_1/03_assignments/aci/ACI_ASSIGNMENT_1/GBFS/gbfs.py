@@ -1,4 +1,5 @@
-import heapq
+import heapq, pprint
+from utils.grid import grid
 
 class GridEnvironment:
     def __init__(self, grid):
@@ -82,19 +83,11 @@ def greedy_best_first_search(grid_env):
                 heapq.heappush(pq, (priority, next_cell))
                 came_from[next_cell] = current
 
-# Define your grid
-grid = [
-    ['S', '.', '.', '.', '#', '#', '.', '.'],
-    ['.', 'F', 'F', '.', '.', '.', '.', 'F'],
-    ['.', '.', '.', '.', '.', '.', '.', '.'],
-    ['#', '#', '.', 'F', '.', '.', '.', '.'],    
-    ['.', 'F', '.', '.', '.', '.', '#', '#'],
-    ['.', '.', '.', 'F', '.', '.', '.', '.'],
-    ['.', '#', '#', '.', '.', 'F', '.', '.'],
-    ['.', '.', '.', '.', '.', 'F', '.', 'G']
-]
+if __name__ == "__main__":
+    env = GridEnvironment(grid)
+    pprint.pprint(env.grid) # Print the grid
+    
+    path, total_cost = greedy_best_first_search(env)
+    print("Path taken by the agent:",path)
+    print("Total path cost:", total_cost)
 
-env = GridEnvironment(grid)
-path, total_cost = greedy_best_first_search(env)
-print("Path taken by the agent:",path)
-print("Total path cost:", total_cost)
