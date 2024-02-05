@@ -1,3 +1,5 @@
+# TODO: Remove this file from the project, the code has been implemented in the GBFSearchAlgorithm.py file
+
 ## Import standard python libraries
 from heapq import heappush, heappop
 from collections import deque
