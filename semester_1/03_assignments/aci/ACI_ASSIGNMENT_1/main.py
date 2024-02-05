@@ -7,7 +7,22 @@ from utils.grid import grid
 from utils.GridEnvironment import GridEnvironment
 from Algorithms.SearchAlgorithmFactory import SearchAlgorithmFactory
 
-if __name__ == "__main__":
+def main():
+    """
+    This script runs a search algorithm on a grid environment.
+
+    Usage:
+        python main.py [-a | -b] [-d]
+
+    Options:
+        -a, --genetic   Run Genetic Algorithm
+        -b, --gbfs      Run Greedy Best First Search
+        -d, --display   Display grid
+
+    Example:
+        python main.py -b -d
+    """
+
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group()
     group.add_argument("-a", "--genetic", action="store_true", help="Run Genetic Algorithm")
@@ -32,3 +47,6 @@ if __name__ == "__main__":
 
     print("Path taken by the agent:",path)
     print("Total path cost:", total_cost)
+
+if __name__ == "__main__":
+    main()
