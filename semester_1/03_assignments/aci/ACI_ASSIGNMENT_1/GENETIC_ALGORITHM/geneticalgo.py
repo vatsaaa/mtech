@@ -1,5 +1,11 @@
 import random
 
+## Import project libraries
+from utils.grid import grid
+
+## Import project files
+from utils.GridEnvironment import GridEnvironment
+
 class Individual:
     def __init__(self, path):
         self.path = path
@@ -78,47 +84,6 @@ def genetic_algorithm(grid_env, population_size=10, mutation_rate=0.01, generati
     print("Final path:", path)
     print("Total cost:", cost)
     return path, cost
-
-# Define your grid
-grid = [
-    ['S', '.', '.', '.', '#', '#', '.', '.'],
-    ['.', 'F', 'F', '.', '.', '.', '.', 'F'],
-    ['.', '.', '.', '.', '.', '.', '.', '.'],
-    ['#', '#', '.', 'F', '.', '.', '.', '.'],    
-    ['.', 'F', '.', '.', '.', '.', '#', '#'],
-    ['.', '.', '.', 'F', '.', '.', '.', '.'],
-    ['.', '#', '#', '.', '.', 'F', '.', '.'],
-    ['.', '.', '.', '.', '.', 'F', '.', 'G']
-]
-
-class GridEnvironment:
-    def __init__(self, grid):
-        self.grid = grid
-        self.rows = len(grid)
-        self.cols = len(grid[0])
-        self.start = None
-        self.goal = None
-        self.find_start_and_goal()
-
-    def find_start_and_goal(self):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if self.grid[i][j] == 'S':
-                    self.start = (i, j)
-                elif self.grid[i][j] == 'G':
-                    self.goal = (i, j)
-
-    def is_valid_move(self, row, col):
-        return 0 <= row < self.rows and 0 <= col < self.cols and self.grid[row][col] != '#' and self.grid[row][col] != 'F'
-
-    def get_adjacent_cells(self, row, col):
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
-        adjacent_cells = []
-        for dr, dc in directions:
-            new_row, new_col = row + dr, col + dc
-            if self.is_valid_move(new_row, new_col):
-                adjacent_cells.append((new_row, new_col))
-        return adjacent_cells
 
 env = GridEnvironment(grid)
 genetic_algorithm(env)
