@@ -31,7 +31,7 @@ def greedy_best_first_search(grid_env: GridEnvironment):
             return list(path), total_cost
         visited.add(current)
 
-        for next_cell in grid_env.get_adjacent_cells(*current):
+        for next_cell in grid_env.get_adjacent_cells(*current, algorithm="greedy"):
             if next_cell in visited:  # Check if the cell has already been visited
                 continue  # Skip to the next iteration if the cell has been visited
 

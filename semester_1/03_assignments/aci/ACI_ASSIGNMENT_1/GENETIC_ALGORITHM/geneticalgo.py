@@ -13,7 +13,7 @@ def create_individual(grid_env):
     path = [(grid_env.start[0], grid_env.start[1])]
     current_pos = grid_env.start
     while current_pos != grid_env.goal:
-        adjacent_cells = grid_env.get_adjacent_cells(*current_pos)
+        adjacent_cells = grid_env.get_adjacent_cells(*current_pos, algorithm="genetic")
         next_pos = random.choice(adjacent_cells)
         path.append(next_pos)
         current_pos = next_pos

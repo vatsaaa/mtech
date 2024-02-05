@@ -1,9 +1,7 @@
 import argparse
 from pprint import pprint
 
-## Import project libraries
 from utils.grid import grid
-
 from utils.GridEnvironment import GridEnvironment
 from Algorithms.SearchAlgorithmFactory import SearchAlgorithmFactory
 
@@ -32,20 +30,21 @@ def main():
 
     env = GridEnvironment(grid)
 
-    if args.display and (args.genetic or args.gbfs):
+    if args.display:
         pprint(env.grid) # Print the grid
 
     if args.gbfs:
-        option = "greedy"
+        algorithm = "greedy"
     elif args.genetic:
-        option = "genetic"
+        algorithm = "genetic"
     else:
         print("Please select an algorithm to run. Use -h for help.")
+        return
     
-    search_algorithm = SearchAlgorithmFactory.create_search_algorithm(option)
+    search_algorithm = SearchAlgorithmFactory.create_search_algorithm(algorithm)
     path, total_cost = search_algorithm.search(env)
 
-    print("Path taken by the agent:",path)
+    print("Path taken by the agent:", path)
     print("Total path cost:", total_cost)
 
 if __name__ == "__main__":

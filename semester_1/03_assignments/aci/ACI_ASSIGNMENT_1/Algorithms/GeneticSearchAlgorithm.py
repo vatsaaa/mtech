@@ -16,7 +16,7 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
             path = [(grid_env.start[0], grid_env.start[1])]
             current_pos = grid_env.start
             while current_pos != grid_env.goal:
-                adjacent_cells = grid_env.get_adjacent_cells(*current_pos)
+                adjacent_cells = grid_env.get_adjacent_cells(*current_pos, algorithm="genetic")
                 next_pos = random.choice(adjacent_cells)
                 path.append(next_pos)
                 current_pos = next_pos
@@ -47,7 +47,7 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
     def mutate(self, individual, grid_env, mutation_rate):
         for i in range(1, len(individual.path) - 1):
             if random.random() < mutation_rate:
-                adjacent_cells = grid_env.get_adjacent_cells(*individual.path[i])
+                adjacent_cells = grid_env.get_adjacent_cells(*individual.path[i], algorithm="genetic" )
                 self.path[i] = random.choice(adjacent_cells)
 
     def search(self, grid_env: GridEnvironment):
