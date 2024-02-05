@@ -27,7 +27,7 @@ class GridEnvironment:
 
     def get_adjacent_cells(self, row, col):
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1)] #degrees of freedom - need to revise by prasnejit
-        adjacent_cells = []
+        adjacent_cells = [] # Return empty list of adjacent cells if all moves are invalid
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if self.is_valid_move(new_row, new_col):

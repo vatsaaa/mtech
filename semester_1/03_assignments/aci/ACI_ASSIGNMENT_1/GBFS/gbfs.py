@@ -1,5 +1,6 @@
 ## Import standard python libraries
 from heapq import heappush, heappop
+from collections import deque
 
 ## Import project files
 from utils.GridEnvironment import GridEnvironment
@@ -17,16 +18,15 @@ def greedy_best_first_search(grid_env: GridEnvironment):
         _, current = heappop(pq)
         if current == goal:
             # Reconstruct and print the path
-            path = []
+            path = deque()
             total_cost = cost_so_far[current]
             while current != start:
-                path.append(current)
+                path.appendleft(current)
                 current = came_from[current]
-            path.append(start)
-            path.reverse()
-            print("Path taken by the agent:", path)
+            path.appendleft(start)
+            print("Path taken by the agent:", list(path))
             print("Total path cost:", total_cost)
-            return path, total_cost
+            return list(path), total_cost
         visited.add(current)
 
         for next_cell in grid_env.get_adjacent_cells(*current):
