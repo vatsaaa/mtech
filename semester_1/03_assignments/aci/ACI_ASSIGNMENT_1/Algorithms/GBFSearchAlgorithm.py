@@ -4,15 +4,44 @@ from collections import deque
 ## Import the project files
 from Algorithms.ISearchAlgorithm import ISearchAlgorithm
 from utils.GridEnvironment import GridEnvironment
+from typing import List, Tuple
 
 class GBFSearchAlgorithm(ISearchAlgorithm):
-    def search(self, grid_env: GridEnvironment): 
+    """
+    Greedy Best-First Search Algorithm implementation.
+
+    This algorithm uses a priority queue to explore the search space based on a heuristic function.
+    It expands the node with the lowest heuristic value, prioritizing the most promising paths towards the goal.
+
+    Attributes:
+        None
+
+    Methods:
+        search(grid_env: GridEnvironment) -> Tuple[List[Tuple[int, int]], int]:
+            Performs the greedy best-first search on the given grid environment.
+
+        heuristic(row: int, col: int) -> int:
+            Calculates the heuristic value for a given cell in the grid.
+
+    """
+
+    def search(self, grid_env: GridEnvironment) -> Tuple[List[Tuple[int, int]], int]:
+        """
+        Performs the greedy best-first search on the given grid environment.
+
+        Args:
+            grid_env (GridEnvironment): The grid environment to search in.
+
+        Returns:
+            Tuple[List[Tuple[int, int]], int]: A tuple containing the path taken by the agent and the total path cost.
+
+        """
         start = grid_env.start
         goal = grid_env.goal
         visited = set()
         pq = [(grid_env.heuristic(*start), start)]
         came_from = {}
-        cost_so_far = {start: 0}  # Store the cost of reaching each cell - revised by prasnejit
+        cost_so_far = {start: 0}  # Store the cost of reaching each cell
 
         while pq:
             _, current = heappop(pq)
@@ -42,7 +71,20 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                     heappush(pq, (priority, next_cell))
                     came_from[next_cell] = current
 
-    def heuristic(self, row, col):
+    def heuristic(self, row: int, col: int) -> int:
+        """
+        Calculates the heuristic value for a given cell in the grid.
+
+        The heuristic value is calculated based on the number of adjacent safe places, water bodies, and flooded roads.
+
+        Args:
+            row (int): The row index of the cell.
+            col (int): The column index of the cell.
+
+        Returns:
+            int: The heuristic value for the cell.
+
+        """
         score = 0
         for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             new_row, new_col = row + dr, col + dc
