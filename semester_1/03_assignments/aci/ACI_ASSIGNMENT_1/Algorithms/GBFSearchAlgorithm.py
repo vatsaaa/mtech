@@ -24,8 +24,12 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
             Calculates the heuristic value for a given cell in the grid.
 
     """
+    def __init__(self, grid_env: GridEnvironment) -> None:
+        super().__init__()
 
-    def search(self, grid_env: GridEnvironment) -> Tuple[List[Tuple[int, int]], int]:
+        self.grid_env = grid_env
+
+    def search(self) -> Tuple[List[Tuple[int, int]], int]:
         """
         Performs the greedy best-first search on the given grid environment.
 
@@ -36,10 +40,10 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
             Tuple[List[Tuple[int, int]], int]: A tuple containing the path taken by the agent and the total path cost.
 
         """
-        start = grid_env.start
-        goal = grid_env.goal
+        start = self.grid_env.start
+        goal = self.grid_env.goal
         visited = set()
-        pq = [(grid_env.heuristic(*start), start)]
+        pq = [(self.heuristic(*start), start)]
         came_from = {}
         cost_so_far = {start: 0}  # Store the cost of reaching each cell
 
@@ -58,7 +62,7 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                 return list(path), total_cost
             visited.add(current)
 
-            for next_cell in grid_env.get_adjacent_cells(*current, algorithm="greedy"):
+            for next_cell in self.grid_env.get_adjacent_cells(*current, algorithm="greedy"):
                 if next_cell in visited:  # Check if the cell has already been visited
                     continue  # Skip to the next iteration if the cell has been visited
 
@@ -66,7 +70,7 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                 if next_cell not in cost_so_far or new_cost < cost_so_far[next_cell]:
                     cost_so_far[next_cell] = new_cost
                     print("Cost of next cell", cost_so_far[next_cell])
-                    priority = new_cost + grid_env.heuristic(*next_cell)
+                    priority = new_cost + self.heuristic(*next_cell)
                     print("Priority of next cell", priority)
                     heappush(pq, (priority, next_cell))
                     came_from[next_cell] = current
@@ -88,11 +92,11 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         score = 0
         for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
             new_row, new_col = row + dr, col + dc
-            if 0 <= new_row < self.rows and 0 <= new_col < self.cols:
-                if self.grid[new_row][new_col] == '.':
+            if 0 <= new_row < self.grid_env.rows and 0 <= new_col < self.grid_env.cols:
+                if self.grid_env.grid[new_row][new_col] == '.':
                     score += 5  # Add 5 points for adjacent safe places
-                elif self.grid[new_row][new_col] == '#':
+                elif self.grid_env.grid[new_row][new_col] == '#':
                     score -= 5  # Deduct 5 points for adjacent water bodies
-                elif self.grid[new_row][new_col] == 'F':
+                elif self.grid_env.grid[new_row][new_col] == 'F':
                     score -= 3  # Deduct 3 points for flooded roads
         return score

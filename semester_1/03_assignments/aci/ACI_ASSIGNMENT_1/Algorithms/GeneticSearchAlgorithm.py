@@ -4,11 +4,15 @@ from Algorithms.ISearchAlgorithm import ISearchAlgorithm
 from utils.GridEnvironment import GridEnvironment
 
 class GeneticSearchAlgorithm(ISearchAlgorithm):
-    population_size: int = 10
-    mutation_rate: float = 0.01
-    generations: int = 100
+    def __init__(self, grid_env: GridEnvironment):
+        super().__init__()
+        self.grid_env = grid_env
 
-    # This class is needed only by GeneticSearchAlgorithm, so it as a nested class
+        self.population_size: int = 10
+        self.mutation_rate: float = 0.01
+        self.generations: int = 100
+
+    # Class needed only by GeneticSearchAlgorithm, so it is a nested class
     class Individual:
         def __init__(self, grid_env):
             individual_type = "Child" # Every individual is a child, until it is a parent
@@ -38,7 +42,6 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
                 elif grid_env.grid[row][col] == 'F':
                     self.fitness -= 3
 
-    # TODO: Look carefully into this, crossover() actually makes a new parent
     def crossover(self, parent1, parent2):
         crossover_point = random.randint(1, min(len(parent1.path), len(parent2.path)) - 1)
         child_path = parent1.path[:crossover_point] + parent2.path[crossover_point:]
@@ -50,12 +53,12 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
                 adjacent_cells = grid_env.get_adjacent_cells(*individual.path[i], algorithm="genetic" )
                 self.path[i] = random.choice(adjacent_cells)
 
-    def search(self, grid_env: GridEnvironment):
-        population = [self.Individual(grid_env) for _ in range(self.population_size)]
+    def search(self):
+        population = [self.Individual(self.grid_env) for _ in range(self.population_size)]
 
         for generation in range(self.generations):
             for individual in population:
-                individual.evaluate_fitness(individual, grid_env)
+                individual.evaluate_fitness(self.grid_env)
 
             population.sort(key=lambda x: x.fitness, reverse=True)
 
@@ -67,7 +70,7 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
                 parent1 = random.choice(population[:self.population_size // 2])
                 parent2 = random.choice(population[:self.population_size // 2])
                 child = self.crossover(parent1, parent2)
-                self.mutate(child, grid_env, self.mutation_rate)
+                self.mutate(child, self.grid_env, self.mutation_rate)
                 next_generation.append(child)
 
             population = next_generation
@@ -77,11 +80,11 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
         cost = 0
         for pos in path:
             row, col = pos
-            if grid_env.grid[row][col] == '.':
+            if self.grid_env.grid[row][col] == '.':
                 cost += 5
-            elif grid_env.grid[row][col] == '#':
+            elif self.grid_env.grid[row][col] == '#':
                 cost -= 5
-            elif grid_env.grid[row][col] == 'F':
+            elif self.grid_env.grid[row][col] == 'F':
                 cost -= 3
         print("Final path:", path)
         print("Total cost:", cost)

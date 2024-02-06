@@ -33,16 +33,3 @@ class GridEnvironment:
                     print(" The move is valid for this %d and %d" % (new_row, new_col))
                 adjacent_cells.append((new_row, new_col))
         return adjacent_cells
-
-    def heuristic(self, row, col):
-        score = 0
-        for dr, dc in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-            new_row, new_col = row + dr, col + dc
-            if 0 <= new_row < self.rows and 0 <= new_col < self.cols:
-                if self.grid[new_row][new_col] == '.':
-                    score += 5  # Add 5 points for adjacent safe places
-                elif self.grid[new_row][new_col] == '#':
-                    score -= 5  # Deduct 5 points for adjacent water bodies
-                elif self.grid[new_row][new_col] == 'F':
-                    score -= 3  # Deduct 3 points for flooded roads
-        return score
