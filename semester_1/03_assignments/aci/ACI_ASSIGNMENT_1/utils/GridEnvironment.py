@@ -1,21 +1,19 @@
 class GridEnvironment:
     def __init__(self, grid):
+        def find_start_and_goal():
+            for i in range(self.rows):
+                for j in range(self.cols):
+                    if self.grid[i][j] == 'S':
+                        self.start = (i, j)
+                        print(" Start position :", self.start)
+                    elif self.grid[i][j] == 'G':
+                        self.goal = (i, j)
+                        print(" Goal position :", self.goal)
+
         self.grid = grid
         self.rows = len(grid)
         self.cols = len(grid[0])
-        self.start = None
-        self.goal = None
-        self.find_start_and_goal()
-
-    def find_start_and_goal(self):
-        for i in range(self.rows):
-            for j in range(self.cols):
-                if self.grid[i][j] == 'S':
-                    self.start = (i, j)
-                    print(" Start position :", self.start)
-                elif self.grid[i][j] == 'G':
-                    self.goal = (i, j)
-                    print(" Goal position :", self.goal)
+        find_start_and_goal()
 
     def is_valid_move(self, row, col):
         return (
