@@ -77,9 +77,8 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
 
     def heuristic(self, row: int, col: int) -> int:
         """
-        Calculates the heuristic value for a given cell in the grid.
-
-        The heuristic value is calculated based on the number of adjacent safe places, water bodies, and flooded roads.
+        Calculates heuristic value for a given cell in the grid. Considering
+        if the adjacent cells are safe, water bodies, or flooded roads
 
         Args:
             row (int): The row index of the cell.

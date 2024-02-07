@@ -4,10 +4,10 @@ class GridEnvironment:
             for i in range(self.rows):
                 for j in range(self.cols):
                     if self.grid[i][j] == 'S':
-                        self.start = (i, j)
+                        self.start = tuple((i, j))
                         print(" Start position :", self.start)
                     elif self.grid[i][j] == 'G':
-                        self.goal = (i, j)
+                        self.goal = tuple((i, j))
                         print(" Goal position :", self.goal)
 
         self.grid = grid
@@ -31,5 +31,8 @@ class GridEnvironment:
             if self.is_valid_move(new_row, new_col):
                 if algorithm == "greedy":
                     print(" The move is valid for this %d and %d" % (new_row, new_col))
-                adjacent_cells.append((new_row, new_col))
+                adjacent_cells.append(tuple((new_row, new_col)))
         return adjacent_cells
+    
+    def goal_reached(self, row, col):
+        return (row, col) == self.goal
