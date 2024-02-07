@@ -36,6 +36,7 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         super().__init__()
 
         self.grid_env = grid_env
+        self.tree = {}
 
     @track_time_and_space
     def search(self) -> Tuple[List[Tuple[int, int]], int, int]:
@@ -55,37 +56,52 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         pq = [(self.heuristic(*start), start)]
         came_from = {}
         cost_so_far = {start: 0}  # Store the cost of reaching each cell
+        total_nodes_expanded = 0
+        total_branching_factor = 0
+        depth_of_solution = 0
 
         while pq:
-            _, current = heappop(pq)
-            if current == goal:
-                # Reconstruct and print the path
-                path = deque()
-                total_cost = cost_so_far[current]
-                while current != start:
-                    path.appendleft(current)
-                    current = came_from[current]
-                path.appendleft(start)
+                print("Open List (Priority Queue):", pq)
+                print("Closed List (Visited Set):", visited)
+                priority, current = heappop(pq)  # Pop the item with lowest priority
+                if current == goal:
+                    # Reconstruct the path
+                    path = deque()
+                    total_cost = cost_so_far[current]
+                    while current != start:
+                        path.appendleft(current)
+                        current = came_from[current]
+                        depth_of_solution += 1  # Increment depth for each step towards the start node
+                    path.appendleft(start)
+                    break  # Exit the loop when the goal node is found
+                    
+                visited.add(current)
+                total_nodes_expanded += 1
 
-                if self.grid_env.display:
-                    print("Path taken by the agent:", list(path))
-                    print("Total path cost:", total_cost)
-                
-                return list(path), total_cost
-            visited.add(current)
+                successors = self.grid_env.get_adjacent_cells(*current, algorithm="greedy")
+                total_branching_factor += len(successors)
 
-            for next_cell in self.grid_env.get_adjacent_cells(*current, algorithm="greedy"):
-                if next_cell in visited:  # Check if the cell has already been visited
-                    continue  # Skip to the next iteration if the cell has been visited
+                for next_cell in successors:
+                    if next_cell in visited:  # Check if the cell has already been visited
+                        continue  # Skip to the next iteration if the cell has been visited
 
-                new_cost = cost_so_far[current] + 1  # Assuming each step has a cost of 1
-                if next_cell not in cost_so_far or new_cost < cost_so_far[next_cell]:
-                    cost_so_far[next_cell] = new_cost
-                    # print("Cost of next cell", cost_so_far[next_cell])
-                    priority = new_cost + self.heuristic(*next_cell)
-                    # print("Priority of next cell", priority)
-                    heappush(pq, (priority, next_cell))
-                    came_from[next_cell] = current
+                    new_cost = cost_so_far[current] + 1  # Assuming each step has a cost of 1
+                    if next_cell not in cost_so_far or new_cost < cost_so_far[next_cell]:
+                        cost_so_far[next_cell] = new_cost
+                        # print("Cost of next cell", cost_so_far[next_cell])
+                        priority = new_cost + self.heuristic(*next_cell)
+                        print("Priority of next cell", priority)
+                        heappush(pq, (priority, next_cell))  # Add the next cell to the priority queue
+                        came_from[next_cell] = current
+
+            # Store the depth of the optimal solution
+        self.depth_of_solution = depth_of_solution
+        print("Total Branching Factor:", round(total_branching_factor / total_nodes_expanded))
+        print("Depth of the graph search tree is:", self.depth_of_solution)
+            # Optionally, you can return the path and total cost if needed
+        return list(path), total_cost
+    
+ 
 
     def heuristic(self, row: int, col: int) -> int:
         """

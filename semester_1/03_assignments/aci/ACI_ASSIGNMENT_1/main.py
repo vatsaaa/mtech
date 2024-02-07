@@ -28,7 +28,6 @@ def main():
 
     search_algorithm = SearchAlgorithmFactory.create_search_algorithm(args)
     path, total_cost = search_algorithm.search()
-
     print("Path taken by the agent:", path)
     print("Total path cost:", total_cost)
 

@@ -1,4 +1,5 @@
-import time, resource
+import time
+import psutil
 
 grid = [
     ['S', '.', '.', '.', '#', '#', '.', '.'],
@@ -14,16 +15,16 @@ grid = [
 def track_time_and_space(func):
     def wrapper(*args, **kwargs):
         start_time = time.time()
-        start_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        start_memory = psutil.Process().memory_info().rss / 1024 / 1024  # in MB
         result = func(*args, **kwargs)
         end_time = time.time()
-        end_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        end_memory = psutil.Process().memory_info().rss / 1024 / 1024  # in MB
 
         execution_time = end_time - start_time
-        memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
+        memory_usage = end_memory - start_memory
 
         print(f"Execution time: {execution_time} seconds")
-        print(f"Memory usage: {memory_usage} KB")
+        print(f"Memory usage: {memory_usage} MB")
 
         return result
 
