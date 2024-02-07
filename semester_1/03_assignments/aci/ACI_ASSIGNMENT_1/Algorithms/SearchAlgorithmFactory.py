@@ -10,7 +10,7 @@ from Algorithms.GeneticSearchAlgorithm import GeneticSearchAlgorithm
 class SearchAlgorithmFactory:
     @staticmethod
     def create_search_algorithm(args):
-        env = GridEnvironment(grid)
+        env = GridEnvironment(grid, args.display)
 
         if args.display:
             pprint(env.grid) # Print the grid

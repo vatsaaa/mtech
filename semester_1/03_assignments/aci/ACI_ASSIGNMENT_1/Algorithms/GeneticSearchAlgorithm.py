@@ -1,6 +1,7 @@
 import random
 from abc import ABC
 
+from utils.grid import track_time_and_space
 from utils.GridEnvironment import GridEnvironment
 from Algorithms.ISearchAlgorithm import ISearchAlgorithm
 
@@ -18,7 +19,7 @@ class Individual(ABC):
             self.path.append(next_pos)
             current_pos = next_pos
 
-    def set_path(self, path):
+    def set_path(self, path: list):
         self.path = path
     
     def evaluate_fitness(self):
@@ -54,6 +55,7 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
         
         return child
 
+    @track_time_and_space
     def search(self):
         population = [Individual(self.grid_env) for _ in range(self.population_size)]
 

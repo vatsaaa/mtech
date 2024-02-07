@@ -1,18 +1,18 @@
 class GridEnvironment:
-    def __init__(self, grid):
+    def __init__(self, grid: list[list[str]], display: bool = False):
         def find_start_and_goal():
             for i in range(self.rows):
                 for j in range(self.cols):
                     if self.grid[i][j] == 'S':
                         self.start = tuple((i, j))
-                        print(" Start position :", self.start)
                     elif self.grid[i][j] == 'G':
                         self.goal = tuple((i, j))
-                        print(" Goal position :", self.goal)
+            print("Start {start}, Goal {goal}:".format(start=self.start, goal=self.goal))
 
         self.grid = grid
         self.rows = len(grid)
         self.cols = len(grid[0])
+        self.display = display
         find_start_and_goal()
 
     def is_valid_move(self, row, col):
@@ -29,7 +29,7 @@ class GridEnvironment:
         for dr, dc in directions:
             new_row, new_col = row + dr, col + dc
             if self.is_valid_move(new_row, new_col):
-                if algorithm == "greedy":
+                if algorithm == "greedy" and self.display:
                     print(" The move is valid for this %d and %d" % (new_row, new_col))
                 adjacent_cells.append(tuple((new_row, new_col)))
         return adjacent_cells

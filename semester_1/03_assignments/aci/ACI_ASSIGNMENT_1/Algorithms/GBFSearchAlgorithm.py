@@ -1,10 +1,12 @@
 from heapq import heappush, heappop
 from collections import deque
+from typing import List, Tuple
 
 ## Import the project files
-from Algorithms.ISearchAlgorithm import ISearchAlgorithm
+from utils.grid import track_time_and_space
 from utils.GridEnvironment import GridEnvironment
-from typing import List, Tuple
+from Algorithms.ISearchAlgorithm import ISearchAlgorithm
+
 
 class GBFSearchAlgorithm(ISearchAlgorithm):
     """
@@ -23,13 +25,20 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         heuristic(row: int, col: int) -> int:
             Calculates the heuristic value for a given cell in the grid.
 
+        time_complexity() -> str:
+            Returns the time complexity of the algorithm.
+
+        space_complexity() -> str:
+            Returns the space complexity of the algorithm.
+
     """
     def __init__(self, grid_env: GridEnvironment) -> None:
         super().__init__()
 
         self.grid_env = grid_env
 
-    def search(self) -> Tuple[List[Tuple[int, int]], int]:
+    @track_time_and_space
+    def search(self) -> Tuple[List[Tuple[int, int]], int, int]:
         """
         Performs the greedy best-first search on the given grid environment.
 
@@ -57,8 +66,11 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                     path.appendleft(current)
                     current = came_from[current]
                 path.appendleft(start)
-                print("Path taken by the agent:", list(path))
-                print("Total path cost:", total_cost)
+
+                if self.grid_env.display:
+                    print("Path taken by the agent:", list(path))
+                    print("Total path cost:", total_cost)
+                
                 return list(path), total_cost
             visited.add(current)
 
@@ -69,9 +81,9 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                 new_cost = cost_so_far[current] + 1  # Assuming each step has a cost of 1
                 if next_cell not in cost_so_far or new_cost < cost_so_far[next_cell]:
                     cost_so_far[next_cell] = new_cost
-                    print("Cost of next cell", cost_so_far[next_cell])
+                    # print("Cost of next cell", cost_so_far[next_cell])
                     priority = new_cost + self.heuristic(*next_cell)
-                    print("Priority of next cell", priority)
+                    # print("Priority of next cell", priority)
                     heappush(pq, (priority, next_cell))
                     came_from[next_cell] = current
 
