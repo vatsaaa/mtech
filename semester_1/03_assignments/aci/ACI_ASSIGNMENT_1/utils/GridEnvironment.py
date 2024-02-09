@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 class GridEnvironment:
     def __init__(self, grid: list[list[str]], display: bool = False):
         def find_start_and_goal():
@@ -14,6 +16,15 @@ class GridEnvironment:
         self.cols = len(grid[0])
         self.display = display
         find_start_and_goal()
+
+    def visualize(self, path):
+      plt.figure(figsize=(len(self.grid), len(self.grid[0])))
+      plt.plot(*zip(*path), marker='o', color='red', label='Path')
+      plt.scatter(*path[0], marker='+', color='green', label='Start')
+      plt.scatter(*path[-1], marker='x', color='blue', label='Goal')
+      plt.legend()
+      plt.grid(True)
+      plt.show() 
 
     def is_valid_move(self, row, col):
         return (
