@@ -1,8 +1,6 @@
 from abc import ABC
 from pprint import pprint
 
-from utils.grid import grid
-
 from utils.GridEnvironment import GridEnvironment
 from Algorithms.GBFSearchAlgorithm import GBFSearchAlgorithm
 from Algorithms.GeneticSearchAlgorithm import GeneticSearchAlgorithm
