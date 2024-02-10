@@ -17,14 +17,25 @@ class GridEnvironment:
         self.display = display
         find_start_and_goal()
 
-    def visualize(self, path):
-      plt.figure(figsize=(len(self.grid), len(self.grid[0])))
-      plt.plot(*zip(*path), marker='o', color='red', label='Path')
-      plt.scatter(*path[0], marker='+', color='green', label='Start')
-      plt.scatter(*path[-1], marker='x', color='blue', label='Goal')
-      plt.legend()
-      plt.grid(True)
-      plt.show() 
+    def visualize(grid, path):
+     # Define colors for different elements
+    colors = {'S': 'green', '.': 'white', '#': 'black', 'F': 'red', 'G': 'blue'}
+    # Create a plot
+    fig, ax = plt.subplots()
+    # Plot each element with specified colors      
+    for i in range(grid.rows):
+        for j in range(grid.cols):
+            ax.text(j, i, grid.grid[i][j], ha='center', va='center', color=colors[grid.grid[i][j]])
+    # Customize ticks
+    ax.set_xticks(range(len(grid.grid[0])))
+    ax.set_yticks(range(len(grid.grid)))
+    ax.set_xticklabels([])
+    ax.set_yticklabels([])
+    # Add grid lines
+    ax.grid(True, which='both', color='black', linewidth=1.5, linestyle='-', alpha=0.7)
+    plt.plot(*zip(*path), marker='o', color='red', label='Path')
+    plt.scatter(*path[0], marker='o', color='green', label='Start')
+    plt.scatter(*path[-1], marker='o', color='blue', label='Goal')
 
     def is_valid_move(self, row, col):
         return (
