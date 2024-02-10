@@ -1,7 +1,7 @@
 import argparse
 from pprint import pprint
 
-from utils.generateGrid import GridGenerator
+from utils.GridGenerator import GridGenerator
 from utils.GridEnvironment import GridEnvironment
 from Algorithms.GBFSearchAlgorithm import GBFSearchAlgorithm
 from Algorithms.GeneticSearchAlgorithm import GeneticSearchAlgorithm
