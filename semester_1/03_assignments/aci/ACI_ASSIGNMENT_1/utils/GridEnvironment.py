@@ -25,7 +25,7 @@ class GridEnvironment:
         # Plot each element with specified colors      
         for i in range(self.rows):
             for j in range(self.cols):
-                ax.text(j, i, self.grid[i][j], ha='center', va='center', color=colors[self.grid[i][j]])
+                ax.text(i, j, self.grid[i][j], ha='center', va='center', color=colors[self.grid[i][j]])
         # Customize ticks
         ax.set_xticks(range(len(self.grid[0])))
         ax.set_yticks(range(len(self.grid)))
