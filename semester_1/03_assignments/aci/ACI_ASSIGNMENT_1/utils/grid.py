@@ -1,8 +1,10 @@
-import time, resource
+import time
 import platform
 
 if platform.system() == "Windows":
     import psutil
+elif platform.system() == "Mac" or platform.system() == "Linux":
+    import resource
 
 def track_time_and_space(func):
     def wrapper(*args, **kwargs):
