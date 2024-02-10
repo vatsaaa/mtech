@@ -1,5 +1,3 @@
-# generateGrid.py
-
 class GridGenerator:
     def __init__(self):
         self.grid = [
@@ -42,16 +40,21 @@ class GridGenerator:
         row, col = position
         if row < 0 or row > 7 or col < 0 or col > 7:
             return None, f"Invalid input! Row and column indices must be between 0 and 7."
+
         if self.grid[row][col] == '#':
             self.print_grid()
             return None, f"Invalid {symbol} position! This cell is occupied by a water body ('#')."
+
         if self.grid[row][col] == 'F':
             self.print_grid()
             return None, f"Invalid {symbol} position! This cell is flooded ('F')."
+
         if self.grid[row][col] == 'S':
             self.print_grid()
             return None, f"Invalid {symbol} position! The start and the Goal position cannot be same."
+
         self.grid[row][col] = symbol
+
         return self.grid, None
 
     def print_grid(self):

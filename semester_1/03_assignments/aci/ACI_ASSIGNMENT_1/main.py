@@ -20,7 +20,9 @@ def main():
         -d, --display   Display grid
 
     Example:
-        python main.py -b -d
+        python main.py          ## Run both Genetic Algorithm and Greedy Best First Search
+        python main.py -b -d    ## Run Greedy Best First Search
+        python main.py -a       ## Run Genetic Algorithm
     """
 
     parser = argparse.ArgumentParser()
