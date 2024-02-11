@@ -31,6 +31,12 @@ class GridEnvironment:
         ax.set_yticks(range(len(self.grid)))
         ax.set_xticklabels([])
         ax.set_yticklabels([])
+
+        # Add description
+        plt.title('S - Start, G - Goal')
+        plt.xlabel('# - Water Bodies')
+        plt.ylabel('F - Flooded Roads')
+
         # Add grid lines
         ax.grid(True, which='both', color='black', linewidth=1.5, linestyle='-', alpha=0.7)
         plt.plot(*zip(*path), marker='o', color='red', label='Path')
