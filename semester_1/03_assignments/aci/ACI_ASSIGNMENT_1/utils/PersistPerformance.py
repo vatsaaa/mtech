@@ -57,7 +57,7 @@ class PersistPerformance:
         # Fetch all documents from the collection
         documents = collection.find()
  
-        client.close()
+        # client.close()
 
         return documents
     

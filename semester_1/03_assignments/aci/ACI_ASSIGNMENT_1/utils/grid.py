@@ -39,8 +39,6 @@ else:
             end_time = time.time()
             end_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
-            print(platform.system(), start_memory, end_memory)
-
             execution_time = end_time - start_time
             memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
 

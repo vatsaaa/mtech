@@ -1,4 +1,3 @@
-from abc import ABC
 from pprint import pprint
 
 from utils.GridGenerator import GridGenerator
@@ -8,10 +7,11 @@ from Algorithms.GeneticSearchAlgorithm import GeneticSearchAlgorithm
 
 class SearchAlgorithmFactory:
     @staticmethod
-    def create_search_algorithm(args):
-        grid_gen = GridGenerator()
-        grid_gen.generate_grid()
-        env = GridEnvironment(grid_gen.grid, args.display)
+    def create_search_algorithm(args, env: GridEnvironment):
+        if not env:
+            grid_gen = GridGenerator()
+            grid_gen.generate_grid()
+            env = GridEnvironment(grid_gen.grid, args.display)
 
         if args.display:
             pprint(env.grid) # Print the grid

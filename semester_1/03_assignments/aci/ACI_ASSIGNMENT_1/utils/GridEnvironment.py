@@ -14,8 +14,8 @@ class GridEnvironment:
             print("Start {start}, Goal {goal}:".format(start=self.start, goal=self.goal))
 
         self.grid = grid
-        self.rows = len(grid)
-        self.cols = len(grid[0])
+        self.rows = len(self.grid)
+        self.cols = len(self.grid[0])
         self.display = display
         find_start_and_goal()
 
