@@ -60,6 +60,9 @@ class PersistPerformance:
         client.close()
 
         return documents
+    
+    def __repr__(self):
+        return f"Date: {self.date_time}, Execution Time: {self.execution_time}, Memory Usage: {self.memory_usage}, Grid Size: {self.grid_shape}, Start: {self.start}, Goal: {self.goal}, Algorithm: {self.algorithm}"
 
 """
     def plot(self):
