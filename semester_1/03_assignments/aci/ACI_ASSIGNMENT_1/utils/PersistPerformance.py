@@ -1,6 +1,8 @@
+import ssl as ssl
 import matplotlib.pyplot as plt
 from pymongo import MongoClient
-import seaborn as sns
+import certifi
+# import seaborn as sns
  
 class PersistPerformance:
     def __init__(self, date_time: str, execution_time: str, memory_usage: str, grid_shape: str, start: str, goal: str, algorithm: str):
@@ -19,7 +21,7 @@ class PersistPerformance:
   
     def persist(self):
         # Create a MongoDB client
-        client = MongoClient(self.mongodb_uri)
+        client = MongoClient(self.mongodb_uri, tlsCAFile=certifi.where())
  
         # Connect to the database
         db = client[self.db]
@@ -46,8 +48,8 @@ class PersistPerformance:
 
     def fetch(self):
         # Create a MongoDB client
-        client = MongoClient(self.mongodb_uri)
- 
+        client = MongoClient(self.mongodb_uri, tlsCAFile=certifi.where())
+
         # Connect to the database
         db = client[self.db]
  
@@ -57,7 +59,7 @@ class PersistPerformance:
         # Fetch all documents from the collection
         documents = collection.find()
  
-        # client.close()
+        #client.close()
 
         return documents
     

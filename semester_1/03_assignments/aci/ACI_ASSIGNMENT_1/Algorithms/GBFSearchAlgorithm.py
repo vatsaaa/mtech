@@ -99,6 +99,7 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         print("Total Branching Factor:", round(total_branching_factor / total_nodes_expanded))
         print("Depth of the graph search tree is:", self.depth_of_solution)
             # Optionally, you can return the path and total cost if needed
+        print("Space Complexity for GBFS Search is :", pq.count)
         return list(path), total_cost
     
  

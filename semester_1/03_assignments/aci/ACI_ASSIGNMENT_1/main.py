@@ -5,6 +5,7 @@ from datetime import datetime
 from utils.GridGenerator import GridGenerator
 from utils.GridEnvironment import GridEnvironment
 from utils.PersistPerformance import PersistPerformance
+from utils.PlotPerformance import PlotPerformance
 from Algorithms.GBFSearchAlgorithm import GBFSearchAlgorithm
 from Algorithms.GeneticSearchAlgorithm import GeneticSearchAlgorithm
 from Algorithms.SearchAlgorithmFactory import SearchAlgorithmFactory
@@ -103,6 +104,28 @@ def main():
             algorithm=args.genetic if args.genetic else args.gbfs
         )
         pp.persist()
+        objs = pp.fetch()
+
+        grid_size_list = []  # Initialize an empty list
+        exe_time_list = []   # Initialize an empty list for exe_time
+        mem_con_list = []   # Initialize an empty list for exe_time
+
+        for data in objs:
+            for key, value in data.items():
+                if key == "grid_size":  # Use == for string comparison
+                    # print(f"{key}: {value[0]}")
+                    grid_size_list.append(value[0])
+                elif key == "execution_time":
+                    exe_time_list.append(value)
+                elif key == "memory_usage":
+                    mem_con_list.append(value)
+
+        # Create an instance of PlotPerformance
+        plot_instance = PlotPerformance(gridSize=grid_size_list, timeConsumed=exe_time_list, memoryConsumed=mem_con_list)
+
+        # Call the plot method
+        plot_instance.plot()
+    
 
 if __name__ == "__main__":
     main()
