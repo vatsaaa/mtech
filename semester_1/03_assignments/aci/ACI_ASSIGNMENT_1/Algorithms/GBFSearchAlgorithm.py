@@ -56,7 +56,8 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         pq = [(self.heuristic(*start), start)]
         came_from = {}
         cost_so_far = {start: 0}  # Store the cost of reaching each cell
-        total_nodes_expanded = 0
+        self.total_nodes_expanded = 0
+       
         total_branching_factor = 0
         depth_of_solution = 0
 
@@ -76,7 +77,7 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                     break  # Exit the loop when the goal node is found
                     
                 visited.add(current)
-                total_nodes_expanded += 1
+                self.total_nodes_expanded += 1
 
                 successors = self.grid_env.get_adjacent_cells(*current, algorithm="greedy")
                 total_branching_factor += len(successors)
@@ -96,10 +97,10 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
 
             # Store the depth of the optimal solution
         self.depth_of_solution = depth_of_solution
-        print("Total Branching Factor:", round(total_branching_factor / total_nodes_expanded))
+        print("Total Branching Factor:", round(total_branching_factor / self.total_nodes_expanded))
         print("Depth of the graph search tree is:", self.depth_of_solution)
             # Optionally, you can return the path and total cost if needed
-        print("Space Complexity for GBFS Search is :", pq.count)
+        print("Space Complexity for GBFS Search is :", self.total_nodes_expanded)
         return list(path), total_cost
     
  

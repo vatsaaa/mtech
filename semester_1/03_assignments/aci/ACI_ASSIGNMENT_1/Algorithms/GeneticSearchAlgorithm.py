@@ -58,10 +58,11 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
     @track_time_and_space
     def search(self):
         population = [Individual(self.grid_env) for _ in range(self.population_size)]
-
+        self.total_nodes_expanded = 0
         for generation in range(self.generations):
             for individual in population:
                 individual.evaluate_fitness()
+                self.total_nodes_expanded += 1
 
             population.sort(key=lambda x: x.fitness, reverse=True)
 
@@ -77,7 +78,7 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
                 next_generation.append(child)
 
             population = next_generation
-
+        print("Space Complexity for Genetic Search is :", self.total_nodes_expanded)
         best_individual = population[0]
         path = best_individual.path
         cost = 0

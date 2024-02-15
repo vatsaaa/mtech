@@ -34,7 +34,7 @@ def main():
     group.add_argument("-b", "--gbfs", action="store_true", help="Run Greedy Best First Search")
     parser.add_argument("-d", "--display", action="store_true", help="Display grid")
     args = parser.parse_args()
-
+    
     dt_now = datetime.now()
 
     if(args.genetic == False) and (args.gbfs == False):
@@ -48,18 +48,20 @@ def main():
 
         print("Path taken by the agent using Greedy Best First Search:", gbfs_path)
         print("Total path cost using Greedy Best First Search:", gbfs_cost)
+        print("Total Memory Usage Greedy Best First Search:", gbfs.total_nodes_expanded)
         args.gbfs = False
 
         pp_gbfs = PersistPerformance(
             date_time=dt_now,
             execution_time=gbfs_etime,
-            memory_usage=gbfs_emem,
+            memory_usage=gbfs.total_nodes_expanded,
             grid_shape=(gbfs.grid_env.rows, gbfs.grid_env.cols),
             start=gbfs.grid_env.start,
             goal=gbfs.grid_env.goal,
             algorithm="Greedy Best First Search"
         )
-        # pp_gbfs.persist()
+        print("Persist 2")
+        pp_gbfs.persist()
         pprint(pp_gbfs)
 
         args.genetic = True
@@ -74,13 +76,14 @@ def main():
         pp_gs = PersistPerformance(
             date_time=dt_now,
             execution_time=gs_etime,
-            memory_usage=gs_emem,
+            memory_usage=genetic_search.total_nodes_expanded,
             grid_shape=(genetic_search.grid_env.rows, genetic_search.grid_env.cols),
             start=genetic_search.grid_env.start,
             goal=genetic_search.grid_env.goal,
             algorithm="Genetic Search"
         )
-        # pp_gs.persist()
+        print("Persist 3")
+        pp_gs.persist()
         pprint(pp_gs)
 
 
@@ -93,19 +96,23 @@ def main():
 
         print("Path taken by the agent:", path)
         print("Total path cost:", cost)
-
+        print("Total memory :", search_algorithm.total_nodes_expanded)
+         
         pp = PersistPerformance(
             date_time=dt_now,
             execution_time=etime,
-            memory_usage=emem,
+            memory_usage=search_algorithm.total_nodes_expanded,
             grid_shape=(search_algorithm.grid_env.rows, search_algorithm.grid_env.cols),
             start=(0, 0),
             goal=(7, 7),
             algorithm="Genetic Search" if args.genetic else "Greedy Best First Search"
         )
+        print("Persist 1")
         pp.persist()
 
+        
         gbfs_records = pp.fetch_by("algorithm", "Greedy Best First Search")
+        
 
         grid_size_list = []
         exe_time_list = []
@@ -122,7 +129,7 @@ def main():
 
         # Create an instance of PlotPerformance
         plot_instance = PlotPerformance(gridSize=grid_size_list, timeConsumed=exe_time_list, memoryConsumed=mem_con_list)
-
+        print("GBFS plot....")
         # Call the plot method
         plot_instance.plot()
     
