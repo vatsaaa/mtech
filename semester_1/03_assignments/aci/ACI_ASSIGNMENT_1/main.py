@@ -101,19 +101,19 @@ def main():
             grid_shape=(search_algorithm.grid_env.rows, search_algorithm.grid_env.cols),
             start=(0, 0),
             goal=(7, 7),
-            algorithm=args.genetic if args.genetic else args.gbfs
+            algorithm="Genetic Search" if args.genetic else "Greedy Best First Search"
         )
         pp.persist()
-        objs = pp.fetch()
 
-        grid_size_list = []  # Initialize an empty list
-        exe_time_list = []   # Initialize an empty list for exe_time
-        mem_con_list = []   # Initialize an empty list for exe_time
+        gbfs_records = pp.fetch_by("algorithm", "Greedy Best First Search")
 
-        for data in objs:
+        grid_size_list = []
+        exe_time_list = []
+        mem_con_list = []
+
+        for data in gbfs_records:
             for key, value in data.items():
-                if key == "grid_size":  # Use == for string comparison
-                    # print(f"{key}: {value[0]}")
+                if key == "grid_size":
                     grid_size_list.append(value[0])
                 elif key == "execution_time":
                     exe_time_list.append(value)
