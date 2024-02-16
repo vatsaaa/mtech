@@ -39,8 +39,10 @@ class Individual(ABC):
                 self.path[i] = random.choice(adjacent_cells)
 
 class GeneticSearchAlgorithm(ISearchAlgorithm):
-    def __init__(self, grid_env):
-        self.grid_env: GridEnvironment = grid_env
+    def __init__(self, grid_env: GridEnvironment):
+        super().__init__(grid_env=grid_env)
+        self.grid_env = grid_env
+        
         self.population_size = 10
         self.generations = 100
         self.mutation_rate = 0.01

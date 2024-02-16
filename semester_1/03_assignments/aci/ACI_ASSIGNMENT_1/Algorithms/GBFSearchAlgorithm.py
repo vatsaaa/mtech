@@ -33,9 +33,9 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
 
     """
     def __init__(self, grid_env: GridEnvironment) -> None:
-        super().__init__()
-
+        super().__init__(grid_env=grid_env)
         self.grid_env = grid_env
+        
         self.tree = {}
 
     @track_time_and_space

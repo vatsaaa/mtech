@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
+from utils.GridEnvironment import GridEnvironment
 
 class ISearchAlgorithm(ABC):
-    def __init__(self) -> None:
+    def __init__(self, grid_env: GridEnvironment) -> None:
         super().__init__()
     
     @abstractmethod

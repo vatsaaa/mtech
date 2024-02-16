@@ -5,19 +5,22 @@ import sys
 class GridEnvironment:
     def __init__(self, grid: list[list[str]], display: bool = False):
         def find_start_and_goal():
+            start: tuple = (-1, -1)
+            goal: tuple = (-1, -1)
             for i in range(self.rows):
                 for j in range(self.cols):
                     if self.grid[i][j] == 'S':
-                        self.start = tuple((i, j))
+                        start = tuple((i, j))
                     elif self.grid[i][j] == 'G':
-                        self.goal = tuple((i, j))
-            print("Start {start}, Goal {goal}:".format(start=self.start, goal=self.goal))
+                        goal = tuple((i, j))
+            print("Start {start}, Goal {goal}:".format(start=start, goal=goal))
+            return start, goal
 
         self.grid = grid
         self.rows = len(self.grid)
         self.cols = len(self.grid[0])
         self.display = display
-        find_start_and_goal()
+        self.start, self.goal = find_start_and_goal()
 
     def visualize(self, path):
          # Define colors for different elements
