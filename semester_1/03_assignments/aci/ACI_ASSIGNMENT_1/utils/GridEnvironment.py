@@ -55,8 +55,11 @@ class GridEnvironment:
             plt.plot(X[i:i+2], Y[i:i+2], color=colors[i])
         
         # plt.plot(*zip(*path), marker='o', color='red', label='Path')
-        plt.scatter(*path[0], marker='o', color='green', label='Start')
-        plt.scatter(*path[-1], marker='o', color='blue', label='Goal')
+        # plt.scatter(*path[0], marker='o', color='green', label='Start')
+        # plt.scatter(*path[-1], marker='o', color='blue', label='Goal')
+        
+        plt.legend()
+        plt.show()
 
     def is_valid_move(self, row, col):
         return (

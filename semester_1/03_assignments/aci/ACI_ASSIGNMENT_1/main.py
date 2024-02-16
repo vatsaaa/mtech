@@ -81,6 +81,7 @@ def main():
         print("Path taken by the agent using Greedy Best First Search:", gbfs_path)
         print("Total path cost using Greedy Best First Search:", gbfs_cost)
         print("Total Memory Usage Greedy Best First Search:", gbfs.total_nodes_expanded)
+        gbfs.grid_env.visualize(gbfs_path)
         
         pp_gbfs = PersistPerformance(
             date_time=dt_now,
@@ -97,13 +98,15 @@ def main():
 
         args.genetic = True
         # Note: Use the grid_env that was created for GBFS, since we want Genetic Search to run on the same grid
-        genetic_search = SearchAlgorithmFactory.create_search_algorithm(args, gbfs.grid_env.grid)
+        genetic_search = SearchAlgorithmFactory.create_search_algorithm(args, gbfs.grid_env)
         gs_results, gs_etime, gs_emem = genetic_search.search()
         gs_path = gs_results[0]
         gs_cost = gs_results[1]
 
         print("Path taken by the agent using Genetic Algorithm:", gs_path)
         print("Total path cost using Genetic Algorithm:", gs_cost)
+        print("Total Memory Usage Greedy Best First Search:", genetic_search.total_nodes_expanded)
+        genetic_search.grid_env.visualize(gs_path)
 
         pp_gs = PersistPerformance(
             date_time=dt_now,
@@ -138,6 +141,7 @@ def main():
             algorithm=algorithm
         )
         pp.persist()
+        search_algorithm.grid_env.visualize(path)
     else:
         print("Invalid arguments. Please refer to the help section below.")
         parser.print_help()

@@ -36,8 +36,6 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         super().__init__(grid_env=grid_env)
         self.grid_env = grid_env
         
-        self.tree = {}
-
     @track_time_and_space
     def search(self) -> Tuple[List[Tuple[int, int]], int, int]:
         """
