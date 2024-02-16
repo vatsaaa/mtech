@@ -58,10 +58,12 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
        
         total_branching_factor = 0
         depth_of_solution = 0
+        self.max_pq_size = 0
 
         while pq:
                 print("Open List (Priority Queue):", pq)
                 print("Closed List (Visited Set):", visited)
+                self.max_pq_size = max(self.max_pq_size, len(pq))
                 priority, current = heappop(pq)  # Pop the item with lowest priority
                 if current == goal:
                     # Reconstruct the path
@@ -95,10 +97,15 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
 
             # Store the depth of the optimal solution
         self.depth_of_solution = depth_of_solution
-        print("Total Branching Factor:", round(total_branching_factor / self.total_nodes_expanded))
+        avg_branching_factor =  round(total_branching_factor / self.total_nodes_expanded)
+        print("Total Branching Factor:", avg_branching_factor)
         print("Depth of the graph search tree is:", self.depth_of_solution)
             # Optionally, you can return the path and total cost if needed
-        print("Space Complexity for GBFS Search is :", self.total_nodes_expanded)
+        print("Toal nodes expanded:", self.total_nodes_expanded)
+        time_complexity = self.gbfs_time_complexity(avg_branching_factor, self.depth_of_solution)
+        print("Time Complexity of GBFS:", time_complexity)
+        space_complexity = self.gbfs_time_complexity
+        print("Worst case Space Complexity of GBFS:", space_complexity )
         return list(path), total_cost
     
  
@@ -127,3 +134,12 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                 elif self.grid_env.grid[new_row][new_col] == 'F':
                     score -= 3  # Deduct 3 points for flooded roads
         return score
+
+
+    def gbfs_time_complexity(branching_factor, depth):
+    # Time complexity: O(b^d)
+       return branching_factor ** depth
+
+    def gbfs_space_complexity(max_priority_queue_size):
+    # Space complexity: O(m)
+       return max_priority_queue_size
