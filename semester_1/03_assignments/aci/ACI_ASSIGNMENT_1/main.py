@@ -96,6 +96,7 @@ def main():
         args.gbfs = False
 
         args.genetic = True
+        # Note: Use the grid_env that was created for GBFS, since we want Genetic Search to run on the same grid
         genetic_search = SearchAlgorithmFactory.create_search_algorithm(args, gbfs.grid_env.grid)
         gs_results, gs_etime, gs_emem = genetic_search.search()
         gs_path = gs_results[0]
