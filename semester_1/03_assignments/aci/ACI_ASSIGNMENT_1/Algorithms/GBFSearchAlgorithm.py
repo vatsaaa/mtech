@@ -59,6 +59,9 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         total_branching_factor = 0
         depth_of_solution = 0
         self.max_pq_size = 0
+        self.avg_branching_factor = 0
+        self.time_complexity = 0
+        self.space_complexity = 0
 
         while pq:
                 print("Open List (Priority Queue):", pq)
@@ -97,15 +100,15 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
 
             # Store the depth of the optimal solution
         self.depth_of_solution = depth_of_solution
-        avg_branching_factor =  round(total_branching_factor / self.total_nodes_expanded)
-        print("Total Branching Factor:", avg_branching_factor)
+        self.avg_branching_factor =  round(total_branching_factor / self.total_nodes_expanded)
+        print("Average Branching Factor:", self.avg_branching_factor)
         print("Depth of the graph search tree is:", self.depth_of_solution)
             # Optionally, you can return the path and total cost if needed
-        print("Toal nodes expanded:", self.total_nodes_expanded)
-        time_complexity = self.gbfs_time_complexity(avg_branching_factor, self.depth_of_solution)
-        print("Time Complexity of GBFS:", time_complexity)
-        space_complexity = self.gbfs_time_complexity
-        print("Worst case Space Complexity of GBFS:", space_complexity )
+        print("Total nodes expanded:", self.total_nodes_expanded)
+        self.time_complexity = self.gbfs_time_complexity()
+        print("Time Complexity of GBFS:", self.time_complexity)
+        self.space_complexity = self.gbfs_space_complexity()
+        print("Worst case Space Complexity of GBFS:", self.space_complexity)
         return list(path), total_cost
     
  
@@ -136,10 +139,10 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         return score
 
 
-    def gbfs_time_complexity(branching_factor, depth):
-    # Time complexity: O(b^d)
-       return branching_factor ** depth
+    def gbfs_time_complexity(self):
+        # Time complexity: O(b^d)
+        return self.avg_branching_factor ** self.depth_of_solution
 
-    def gbfs_space_complexity(max_priority_queue_size):
-    # Space complexity: O(m)
-       return max_priority_queue_size
+    def gbfs_space_complexity(self):
+        # Space complexity: O(m)
+        return self.max_pq_size

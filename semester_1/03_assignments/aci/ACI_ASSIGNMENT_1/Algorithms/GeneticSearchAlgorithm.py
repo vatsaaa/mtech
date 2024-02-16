@@ -21,6 +21,7 @@ class Individual(ABC):
 
     def set_path(self, path: list):
         self.path = path
+     
     
     def evaluate_fitness(self):
         for pos in self.path:
@@ -80,7 +81,7 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
                 next_generation.append(child)
 
             population = next_generation
-        print("Space Complexity for Genetic Search is :", self.total_nodes_expanded)
+        print("Memory Computation for Genetic Search is :", self.total_nodes_expanded)
         best_individual = population[0]
         path = best_individual.path
         cost = 0
@@ -92,4 +93,20 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
                 cost -= 5
             elif self.grid_env.grid[row][col] == 'F':
                 cost -= 3
+        
+        total_individuals = sum(len(individual.path) for individual in population)
+        average_individual_size = total_individuals / self.population_size
+        
+        # Time complexity calculation: O(g * n * m)
+        time_complexity = self.generations * self.population_size * average_individual_size
+        print("Time Complexity of Genetic Search Algorithm:", time_complexity)
+        space_complexity = self.population_size * len(population[0].path)
+        print("Space Complexity of Genetic Search Algorithm:", space_complexity)
+
         return path, cost
+
+  
+
+
+    
+
