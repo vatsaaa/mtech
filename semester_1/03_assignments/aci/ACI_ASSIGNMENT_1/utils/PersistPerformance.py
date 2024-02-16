@@ -4,10 +4,11 @@ from pymongo import cursor, MongoClient
 import certifi
  
 class PersistPerformance:
-    def __init__(self, date_time: str, execution_time: str, memory_usage: str, grid_shape: str, start: str, goal: str, algorithm: str):
+    def __init__(self, date_time: str, execution_time: str, memory_usage: str, total_nodes_expanded: int, grid_shape: str, start: str, goal: str, algorithm: str):
         self.date_time = date_time
         self.execution_time = execution_time
         self.memory_usage = memory_usage
+        self.total_nodes_expanded = total_nodes_expanded
         self.grid_shape = grid_shape
         self.start = start
         self.goal = goal
