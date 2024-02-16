@@ -81,8 +81,7 @@ def main():
         print("Path taken by the agent using Greedy Best First Search:", gbfs_path)
         print("Total path cost using Greedy Best First Search:", gbfs_cost)
         print("Total Memory Usage Greedy Best First Search:", gbfs.total_nodes_expanded)
-        args.gbfs = False
-
+        
         pp_gbfs = PersistPerformance(
             date_time=dt_now,
             execution_time=gbfs_etime,
@@ -94,6 +93,7 @@ def main():
             algorithm="Greedy Best First Search"
         )
         pp_gbfs.persist()
+        args.gbfs = False
 
         args.genetic = True
         genetic_search = SearchAlgorithmFactory.create_search_algorithm(args, gbfs.grid_env.grid)
@@ -132,12 +132,16 @@ def main():
             memory_usage=emem,
             total_nodes_expanded=search_algorithm.total_nodes_expanded,
             grid_shape=(search_algorithm.grid_env.rows, search_algorithm.grid_env.cols),
-            start=(0, 0),
-            goal=(7, 7),
+            start=search_algorithm.grid_env.start,
+            goal=search_algorithm.grid_env.goal,
             algorithm=algorithm
         )
         pp.persist()
-    elif args.plot:
+    else:
+        print("Invalid arguments. Please refer to the help section below.")
+        parser.print_help()
+
+    if args.plot:
         gbfs_grid_size_list = []
         gbfs_exe_time_list = []
         gbfs_mem_con_list = []
@@ -174,9 +178,6 @@ def main():
         plot_instance = PlotPerformance(gridSize=gbfs_grid_size_list, timeConsumed=gbfs_exe_time_list, memoryConsumed=gbfs_mem_con_list, algorithm="Greedy Best First Search")
         plot_instance.plot_time()
         plot_instance.plot_memory()
-    else:
-        print("Invalid arguments. Please refer to the help section below.")
-        parser.print_help()
 
 if __name__ == "__main__":
     main()

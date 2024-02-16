@@ -37,6 +37,7 @@ class PersistPerformance:
             "grid_size": self.grid_shape,
             "start": self.start,
             "goal": self.goal,
+            "total_nodes_expanded": self.total_nodes_expanded,
             "algorithm": self.algorithm
         }
  
