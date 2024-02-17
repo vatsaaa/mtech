@@ -138,7 +138,6 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
                     score -= 3  # Deduct 3 points for flooded roads
         return score
 
-
     def gbfs_time_complexity(self):
         # Time complexity: O(b^d)
         return self.avg_branching_factor ** self.depth_of_solution

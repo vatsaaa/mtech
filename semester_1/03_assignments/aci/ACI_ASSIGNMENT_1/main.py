@@ -1,4 +1,4 @@
-import argparse
+import sys
 from pprint import pprint
 from datetime import datetime
 
@@ -57,22 +57,14 @@ def main():
         python main.py -a       ## Run Genetic Algorithm
         python main.py -p       ## Plot performance graphs
     """
-
-    parser = argparse.ArgumentParser()
-    group = parser.add_mutually_exclusive_group()
-    group.add_argument("-a", "--genetic", action="store_true", help="Run Genetic Algorithm")
-    group.add_argument("-b", "--gbfs", action="store_true", help="Run Greedy Best First Search")
-    parser.add_argument("-d", "--display", action="store_true", help="Display grid")
-    parser.add_argument("-p", "--plot", action="store_true", help="Plot performance graphs")
-    
-    args = parser.parse_args()
-    
+    args = sys.argv[1:]
+    print("Arguments:", args)
     dt_now = datetime.now()
 
-    if(args.genetic == False) and (args.gbfs == False) and (args.plot == False):
+    if "-a" not in args and "-b" not in args and "-p" not in args:
         print("Running both Genetic Algorithm and Greedy Best First Search")
 
-        args.gbfs = True
+        args.append("-b")
         gbfs = SearchAlgorithmFactory.create_search_algorithm(args, None)
         gbfs_results, gbfs_etime, gbfs_emem = gbfs.search()
         gbfs_path = gbfs_results[0]
@@ -94,9 +86,9 @@ def main():
             algorithm="Greedy Best First Search"
         )
         pp_gbfs.persist()
-        args.gbfs = False
+        args.remove("-b")
 
-        args.genetic = True
+        args.append("-a")
         # Note: Use the grid_env that was created for GBFS, since we want Genetic Search to run on the same grid
         genetic_search = SearchAlgorithmFactory.create_search_algorithm(args, gbfs.grid_env)
         gs_results, gs_etime, gs_emem = genetic_search.search()
@@ -119,7 +111,7 @@ def main():
             algorithm="Genetic Search"
         )
         pp_gs.persist()
-    elif args.gbfs or args.genetic:
+    elif "-b" in args or "-a" in args:
         search_algorithm = SearchAlgorithmFactory.create_search_algorithm(args, None)
         
         search_results, etime, emem = search_algorithm.search()
@@ -129,7 +121,7 @@ def main():
         print("Path taken by the agent:", path)
         print("Total path cost:", cost)
         print("Total memory :", search_algorithm.total_nodes_expanded)
-        algorithm="Genetic Search" if args.genetic else "Greedy Best First Search"
+        algorithm="Genetic Search" if "-a" in args else "Greedy Best First Search"
         pp = PersistPerformance(
             date_time=dt_now,
             execution_time=etime,
@@ -144,9 +136,9 @@ def main():
         search_algorithm.grid_env.visualize(path)
     else:
         print("Invalid arguments. Please refer to the help section below.")
-        parser.print_help()
+        print(main.__doc__)
 
-    if args.plot:
+    if "-p" in args:
         gbfs_grid_size_list = []
         gbfs_exe_time_list = []
         gbfs_mem_con_list = []
@@ -160,7 +152,7 @@ def main():
                     gbfs_exe_time_list.append(value)
                 elif key == "memory_usage":
                     gbfs_mem_con_list.append(value)
-        if args.display:
+        if "-d" in args:
             print("Number of Greedy Best First Search records:", count_gbfs)
 
         gs_grid_size_list = []
@@ -176,8 +168,8 @@ def main():
                     gs_exe_time_list.append(value)
                 elif key == "memory_usage":
                     gs_mem_con_list.append(value)
-        if args.display:
-            ("Number of Genetic Search records:", count_gs)
+        if "-d" in args:
+            print("Number of Genetic Search records:", count_gs)
 
         # Create an instance of PlotPerformance
         plot_instance = PlotPerformance(gridSize=gbfs_grid_size_list, timeConsumed=gbfs_exe_time_list, memoryConsumed=gbfs_mem_con_list, algorithm="Greedy Best First Search")
