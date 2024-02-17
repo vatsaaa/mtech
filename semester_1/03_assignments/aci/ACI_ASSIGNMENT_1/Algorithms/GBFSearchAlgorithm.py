@@ -7,7 +7,6 @@ from utils.grid import track_time_and_space
 from utils.GridEnvironment import GridEnvironment
 from Algorithms.ISearchAlgorithm import ISearchAlgorithm
 
-
 class GBFSearchAlgorithm(ISearchAlgorithm):
     """
     Greedy Best-First Search Algorithm implementation.
@@ -100,7 +99,7 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
 
             # Store the depth of the optimal solution
         self.depth_of_solution = depth_of_solution
-        self.avg_branching_factor =  round(total_branching_factor / self.total_nodes_expanded)
+        self.avg_branching_factor = round(total_branching_factor / self.total_nodes_expanded)
         print("Average Branching Factor:", self.avg_branching_factor)
         print("Depth of the graph search tree is:", self.depth_of_solution)
             # Optionally, you can return the path and total cost if needed
@@ -110,8 +109,6 @@ class GBFSearchAlgorithm(ISearchAlgorithm):
         self.space_complexity = self.gbfs_space_complexity()
         print("Worst case Space Complexity of GBFS:", self.space_complexity)
         return list(path), total_cost
-    
- 
 
     def heuristic(self, row: int, col: int) -> int:
         """

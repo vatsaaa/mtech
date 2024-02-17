@@ -104,9 +104,3 @@ class GeneticSearchAlgorithm(ISearchAlgorithm):
         print("Space Complexity of Genetic Search Algorithm:", space_complexity)
 
         return path, cost
-
-  
-
-
-    
-
