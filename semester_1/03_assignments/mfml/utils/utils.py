@@ -1,5 +1,10 @@
 import numpy as np
 
+student_id_orig = '2023aa05727'
+student_id = '2023aa05727'
+# remove non-numeric characters from the student id
+student_id = ''.join([i for i in student_id if i.isdigit()])
+
 def generate_positive_definite_symmetric_matrix(size: int):
     # Check if the size is a positive integer
     if not isinstance(size, int) or size <= 0:
