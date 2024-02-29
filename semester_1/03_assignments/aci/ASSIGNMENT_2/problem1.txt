@@ -1,0 +1,160 @@
+I want to code a game called "Catch-Up with numbers" in Object oriented Python, Catch-Up has five rules of play. If understood, please say OK and then I will share the rules of the game. Do not say anything else.
+
+
+Rule 1: Two players take turns at choosing numbers from the set of natural numbers, {1, 2, 3, …, n}. The highest natural number n in this set is agreed on before the game. Once a number has been chosen, it is deleted from the set and cannot be chosen again.
+Rule 2: Call the player to make the first move P1, and the second player P2. I will refer to them both as "it". At the outset, P1 chooses one of the n original numbers.
+Rule 3: Thereafter, P1 and P2 successively choose one or more of the remaining numbers, but each must stop—and turn play over to the other player—when the sum of its choices up to that point equals or just exceeds its opponent's previous sum.
+Rule 4: The goal of the players is to have a higher sum than an opponent at the end of play and by as much as possible—or that failing, to have the same sum. If neither of these goals is achievable, a player prefers to lose by as small amount as possible.
+Rule 5: The game ends when all numbers have been chosen. If one player has a higher sum than the other, that player wins. If not the game ends in a tie.
+
+If understood, please say OK and then I will share some playing examples and choices to demonstrate how the game progresses. Do not say anything else.
+
+Example:
+Assume n=5, so the numbers at the start are {1, 2, 3, 4, 5}. Sample choices of players are as below:
+
+Player1's first choice:
+P1 chooses one of the 5 numbers at random. Each number has the same probability of being chosen.
+
+Player2's first choice:
+For purposes of illustration, assume that P1 chooses {3}. Then there are eight possible subsets of the remaining numbers whose sum equals or exceeds 3:
+{4}, {5}, {1, 2}, {1, 4}, {1, 5}, {2, 1}, {2, 4}, {2, 5}
+P2 chooses one of these possibilities at random. Again, all possibilities have an equal probability of being picked.
+
+In six of these cases, the subsets comprise two numbers, wherein the first number—either 1 or 2—is less than 3, so a second number (the second number in each subset) is needed to make the sum for P2 equal to or greater than 3. After P2 chooses one of the eight subsets at random, either two or three numbers remain.
+
+Player1's second choice:
+P1 will choose again, and at random, a subset of the remaining numbers such that, when they are added to P1's present score of 3, equals or exceeds P2's score. Depending on the numbers that P1 chooses when it makes a second choice, P2 may or may not have a second choice that equals or exceeds P1's last total.
+
+In summary, when a player randomises, it chooses with equal probability any of the subsets of available numbers that equal or exceed an opponent's last total.
+
+If understood, please say OK.
+
+
+Yes, the article provides two examples of how to play Catch-Up.
+
+
+
+I can share an article that explains some other examples e.g.
+The first example involves a situation where n = 2, meaning there are only two numbers to choose from: 1 and 2. In this case, the player who chooses the higher number (2) will win.
+
+The second example involves a situation where n = 3, meaning there are three numbers to choose from: 1, 2, and 3. In this case, the player who goes first has multiple options, but none that will guarantee them a win. If the first player chooses 3, the second player can choose 1 and 2, and tie the game. If the first player chooses 2, the second player can choose 1 and 3, and win the game. Finally, if the first player chooses 1, the second player can choose 3 and tie the game.
+
+Would that be helpful.
+
+
+
+Artificial intelligence (AI) has succeeded spectacularly in certain kinds of tasks. These include playing specific games, such as Chess or Go, and finding patterns in images, such as identifying when a human organ is diseased or otherwise abnormal. It has done much less well in situations requiring more generalised learning, such as in understanding a text, or translating it from one language into another. Worse, acting like a human by expressing—and, especially, feeling—appropriate emotions seems well beyond AI's capacity.
+
+A robot
+AI is good at some specialised tasks, but not as good at more general ones.
+
+AI's collection of tools, such as neural networks (find out more here), has helped to fuel recent advances, including the design of self-driving cars and trucks. Such advances require enormous computational power as well as smart algorithms to put this power to good use. With uncanny but not perfect accuracy, AI has been able to identify driving situations in which it is safe to proceed, slow down, speed up, turn, stop, or choose myriad variations on these basic actions, though not without incurring some fatal accidents.
+
+It is surprising, therefore, to discover a game, Catch-Up, whose absurdly simple rules and a particular strategy have so far foiled AI's ability to outplay human players, whom it has trounced in much more complex games like Chess and Go. This is especially ironic when the human player makes random choices, which would be disastrous against an AI opponent in Chess or Go. I will suggest reasons why this is the case later, but first I describe the rules of Catch-Up and then consider what constitutes optimal play in it.
+
+If understood so far, say OK and I will share the article further.
+
+
+Two examples
+To illustrate the rules, and the best way of playing, let's look at the simple case where n=2, so the numbers to choose from are {1,2}. (The case where n=1 is trivial, as P1 will simply choose 1 and win).
+
+When n=2, then P1 should choose 2. P2's only choice is 1, so it will lose to P1 by 2-1.
+
+Next let's look at the simple case where n=3, so the numbers to choose from are {1,2,3}. There are now three possibilities:
+
+If P1 chooses {3}, P2 will choose {1, 2} in either order and guarantee a 3-3 tie.
+If P1 chooses {2}, P2 will choose {1, 3}, in that order, and guarantee a 4-2 win. This is better for P2 than choosing {3} first. In that case it would then be P1's turn to choose the remaining {1}, leading to a 3-3 draw.
+If P1 chooses {1}, P2 will choose {3} and guarantee a 3-3 tie after P1 subsequently chooses {2} on the next round.
+Clearly, P1 can force a draw in the first and third case, whereas in the second case P1 will lose as long as P2 plays optimally. Thus, P1 should not choose {2} initially but instead should choose {1} or {3} to ensure a draw.
+
+If understood so far, say OK and I will share the article further.
+
+
+Optimal play
+In the examples above, to work out the best opening move for P1, we checked all the possible outcomes of the game and then picked a first move for P1 that achieved the best one of the these possible outcomes. The thought process here is called backward induction, a venerable idea going back more than 100 years that is used in the solution of sequential games like Chess (see, for example, this paper for more information). The idea is to work from the end of the game back to the beginning, assuming at each stage that the players' aim is to play optimally in order to win. I assume that each player, looking ahead, anticipates that it and its opponent will make optimal choices when it is each's turn to choose from the set of numbers still available.
+
+Dice
+Catch-Up doesn't involve dice, but you can still use a randomised strategy. See below!
+
+Applying computer-assisted backward induction to all sets of natural numbers from n=2 to n=20, Aaron Isaksen, Mehmet Ismail, Andy Nealen and I found that when the sum of all numbers is odd, optimal play results in a win by either P1 or P2 by a difference in their sums of 1 (you can find out more in our paper.) This happens, for example, when n=2 because 1+2=3 is odd and P1 wins by 2-1. When the sum of the numbers is even, optimal play results in a draw. This happens, for example, when n=3 because 1+2+3 = 6. As we saw above, optimal play results in a draw of 3-3.
+
+When the sum of the numbers is odd, one might think that P1, by going first, might always be able to force a win, but this is not the case. Excluding the cases of n=1 and 2 that I just discussed, P2 can force a win when n=9, 10, 14, or 18, whereas P1 can force a win when n=5, 6, 13, or 17. In all other cases (n = 3, 4, 7, 8, 11, 12, 15, 16, 19, 20) the sum of all numbers is even, so optimal play produces a draw.
+
+In summary, our backward-induction calculations for Catch-Up show that neither P1 nor P2 wins more often than the other between n=3 and 20 (four times each). Optimal play in the other 10 cases between n=3 and 20 leads to a draw. This is a different situation from what we find in Chess, wherein there is a general agreement that optimal play leads to a draw, or possibly a win by white (less likely, a win by black).
+
+If understood so far, say OK and I will share the article further.
+
+
+
+
+Randomised play
+Backward induction tells you how to best play the game, but it becomes hard to do as the number n gets larger, and it's not very much fun. A human player might therefore use some other strategy to play the game. For example, one thing you might do is always choose the numbers so as to maximise your lead over the opponent every time it is your turn. Another strategy is to choose numbers so as to minimise that lead. A third strategy would be to choose as many numbers as possible when it is your turn, leaving your opponent with as few numbers as possible to choose from.
+
+When we analysed the game of Catch-Up, my colleagues and I compared the performance of each of these three strategies against a player who randomises its choices. To illustrate what randomisation means, let's assume n=5, so the numbers at the start are {1, 2, 3, 4, 5}. Randomisation works as follows:
+
+P1's first choice:
+P1 chooses one of the 5 numbers at random. Each number has the same probability of being chosen. You could accomplish this, for example, by writing the numbers 1 to 5 on slips of paper and then picking them randomly out of a hat.
+
+P2's first choice:
+For purposes of illustration, assume that P1 chooses {3}. Then there are eight possible subsets of the remaining numbers whose sum equals or exceeds 3:
+
+{4}, {5}, {1, 2}, {1, 4}, {1, 5}, {2, 1}, {2, 4}, {2, 5}
+Randomising these choices means that P2 chooses one of these possibilities at random. Again all possibilities have an equal probability of being picked.
+
+In six of these cases, the subsets comprise two numbers, wherein the first number—either 1 or 2—is less than 3, so a second number (the second number in each subset) is needed to make the sum for P2 equal to or greater than 3. After P2 chooses one of the eight subsets at random, either two or three numbers remain.
+
+P1's second choice:
+P1 will choose again, and at random, a subset of the remaining numbers such that, when they are added to P1's present score of 3, equals or exceeds P2's score. Depending on the numbers that P1 chooses when it makes a second choice, P2 may or may not have a second choice that equals or exceeds P1's last total.
+
+In summary, when a player randomises, which I call the strategy RD, it chooses with equal probability any of the subsets of available numbers that equal or exceed an opponent's last total.
+
+If understood so far, say OK and I will share the article further.
+
+
+Randomised play against other strategies
+We tested this RD strategy against the three non-random strategies mentioned above when n=10 by playing 100,000 games of each. RD won the following percentages against each of the three kinds of opponents:
+
+41.7% against the opponent who always maximises its lead
+60.9% against the opponent who always minimises its lead
+46.5% against the opponent who always chooses as many numbers as possible.
+This suggests that the performance of RD was middling. The most decisive win score from matching each strategy, including RD, against every other is that the second strategy beat the first strategy in 79.7% of games.
+
+
+If understood so far, say OK and I will share the article further.
+
+
+
+Problems of AI in Catch-Up
+Can an AI player do better against RD than any of the non-AI strategies? We could of course program a computer to perform backward induction to find the optimal moves, but this wouldn't really answer the question. First, it wouldn't amount to what we think of as artificial intelligence, involving nothing more than a computer following a recipe invented by humans.
+
+What's more, the approach is infeasible for all but small values of n. Because the number of possible choices of a player in Catch-Up increases exponentially with n, no present or foreseeable computer will be able to find optimal strategies in Catch-Up for, say, n=100. The situation is similar to what happens in Chess and Go, where backward induction also presents too complex a task. (This is not true for Checkers, where multiple computers making calculations over almost two decades have found optimal strategies that always produce a draw.)
+
+Assume that AI uses the currently best-known approach to artificial intelligence, called deep learning. This involves an algorithm spotting patterns in a large set of example data (such as a very large number of games played) that lead to a desired outcome (such as a win in the game). To find out more about deep learning, a form of machine learning, see this article. This approach is used by the program AlphaZero, which can defeat any human player in Chess or Go from what it has learned in playing against itself in a million or more games.
+
+
+Chess is too complex for backward induction to work.
+
+Is something similar possible in Catch-Up? If AI were to play against a non-random strategy a large number of times, it would eventually learn its optimal moves. Because a non-random strategy always responds to a given game situation in exactly the same way (for example, by picking the numbers that maximise its lead), playing the game a large number of times would result in the same sequences of moves coming up again and again. AI would learn which of these lead to desired outcomes and play accordingly. This would amount to a form of backward induction: it involves following sequences of moves through to the end, and in any given situation choosing a move that, as AI has learnt, leads to a favourable result.
+
+RD's moves, by contrast, are unpredictable. A given move by AI might lead to a win in one game and a loss in another, making it impossible for AI to discern which moves are best. Because there is no rhyme or reason to RD's choices, any regularity that AI detects in RD's play will be a chimera.
+
+A difference between Catch-Up on the one hand and Chess or Go on the other is that for the latter two games, random play would lead to one's swift defeat. As we saw in the previous section, this is not the case for RD in Catch-Up: its performance against other strategies is by no means disastrous. This feature may be related to the fact that each player in Catch-Up stays equal to or ahead of its opponent after its own move, so no player ever falls hopelessly far behind. In Chess or Go, by contrast, this can happen, so an AI program can exploit a mistake, pull ahead, and go on to win. This is impossible to do in Catch-Up where every advantage of being ahead is only temporary.
+
+
+
+If understood so far, say OK and I will share the article further.
+
+
+Conclusion
+Catch-Up may be beyond the reach of AI. What distinguishes Catch-Up from Chess and Go, wherein optimal play depends on making "good" moves in response to the non-random choices of an opponent, is that RD's choices provide no basis for AI's making good moves. Something similar may be true for other behaviour that reflects random processes in the natural world, or applies them in the play of certain games: these seem fundamentally beyond the reach of AI.
+
+The fact that a player who is behind its opponent on any round can use its turn to catch up in Catch-Up means that no player can ever fall too far behind, as can happen in Chess or Go. The fact that Catch-Up keeps competition close, even if backward induction indicates at an earlier point that one player has an unassailable advantage, also distinguishes Catch-Up from Chess or Go.
+
+It is the desultoriness of RD that prevents AI from exploiting its choices, except via the (non-intelligent) use of backward induction. By contrast, random choices in Chess or Go are eminently exploitable. This singles out Catch-Up as a strategic game that, via RD, can stymie AI.
+
+I know of no other competitive games in which random choices are the Achilles heel of an AI program meant to exploit a human or nonhuman opponent. This is not meant to deprecate AI or machine learning as a means for a player to defeat an opponent who is not able to think so deeply. Rather, it is to show that thoughtless random choices can make it impossible for AI to gain an upper hand in certain games. It is true that randomisation in Rock, Paper, Scissors thwarts AI, but unlike Catch-Up, this is not because randomisation prevents AI from learning the winning strategy. It's because there is no winning strategy in Rock, Paper, Scissors, whereas in Catch-Up there is, but randomisation makes it impossible to learn.
+
+
+If understood so far, say OK and I will share the article further.
+
+
