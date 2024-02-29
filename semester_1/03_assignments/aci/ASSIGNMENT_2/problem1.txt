@@ -1,4 +1,4 @@
-I want to code a game called "Catch-Up with numbers" in Object oriented Python, Catch-Up has five rules of play. If understood, please say OK and then I will share the rules of the game. Do not say anything else.
+I want to code a game called "Catch-Up with numbers" in Object oriented Python, "Catch-Up with numbers" has five rules of play. If understood, please say OK and then I will share the rules of the game. Do not say anything else.
 
 
 Rule 1: Two players take turns at choosing numbers from the set of natural numbers, {1, 2, 3, …, n}. The highest natural number n in this set is agreed on before the game. Once a number has been chosen, it is deleted from the set and cannot be chosen again.
@@ -30,16 +30,13 @@ In summary, when a player randomises, it chooses with equal probability any of t
 If understood, please say OK.
 
 
-Yes, the article provides two examples of how to play Catch-Up.
-
-
 
 I can share an article that explains some other examples e.g.
 The first example involves a situation where n = 2, meaning there are only two numbers to choose from: 1 and 2. In this case, the player who chooses the higher number (2) will win.
 
 The second example involves a situation where n = 3, meaning there are three numbers to choose from: 1, 2, and 3. In this case, the player who goes first has multiple options, but none that will guarantee them a win. If the first player chooses 3, the second player can choose 1 and 2, and tie the game. If the first player chooses 2, the second player can choose 1 and 3, and win the game. Finally, if the first player chooses 1, the second player can choose 3 and tie the game.
 
-Would that be helpful.
+Would that be helpful?
 
 
 
@@ -120,11 +117,11 @@ We tested this RD strategy against the three non-random strategies mentioned abo
 This suggests that the performance of RD was middling. The most decisive win score from matching each strategy, including RD, against every other is that the second strategy beat the first strategy in 79.7% of games.
 
 
-If understood so far, say OK and I will share the article further.
+If understood so far, say OK and I will share the article further. Please do as instructed, nothing else. 
 
 
 
-Problems of AI in Catch-Up
+Problems of AI in "Catch-Up with numbers"
 Can an AI player do better against RD than any of the non-AI strategies? We could of course program a computer to perform backward induction to find the optimal moves, but this wouldn't really answer the question. First, it wouldn't amount to what we think of as artificial intelligence, involving nothing more than a computer following a recipe invented by humans.
 
 What's more, the approach is infeasible for all but small values of n. Because the number of possible choices of a player in Catch-Up increases exponentially with n, no present or foreseeable computer will be able to find optimal strategies in Catch-Up for, say, n=100. The situation is similar to what happens in Chess and Go, where backward induction also presents too complex a task. (This is not true for Checkers, where multiple computers making calculations over almost two decades have found optimal strategies that always produce a draw.)
@@ -146,7 +143,7 @@ If understood so far, say OK and I will share the article further.
 
 
 Conclusion
-Catch-Up may be beyond the reach of AI. What distinguishes Catch-Up from Chess and Go, wherein optimal play depends on making "good" moves in response to the non-random choices of an opponent, is that RD's choices provide no basis for AI's making good moves. Something similar may be true for other behaviour that reflects random processes in the natural world, or applies them in the play of certain games: these seem fundamentally beyond the reach of AI.
+"Catch-Up with numbers" may be beyond the reach of AI. What distinguishes Catch-Up from Chess and Go, wherein optimal play depends on making "good" moves in response to the non-random choices of an opponent, is that RD's choices provide no basis for AI's making good moves. Something similar may be true for other behaviour that reflects random processes in the natural world, or applies them in the play of certain games: these seem fundamentally beyond the reach of AI.
 
 The fact that a player who is behind its opponent on any round can use its turn to catch up in Catch-Up means that no player can ever fall too far behind, as can happen in Chess or Go. The fact that Catch-Up keeps competition close, even if backward induction indicates at an earlier point that one player has an unassailable advantage, also distinguishes Catch-Up from Chess or Go.
 
@@ -155,6 +152,6 @@ It is the desultoriness of RD that prevents AI from exploiting its choices, exce
 I know of no other competitive games in which random choices are the Achilles heel of an AI program meant to exploit a human or nonhuman opponent. This is not meant to deprecate AI or machine learning as a means for a player to defeat an opponent who is not able to think so deeply. Rather, it is to show that thoughtless random choices can make it impossible for AI to gain an upper hand in certain games. It is true that randomisation in Rock, Paper, Scissors thwarts AI, but unlike Catch-Up, this is not because randomisation prevents AI from learning the winning strategy. It's because there is no winning strategy in Rock, Paper, Scissors, whereas in Catch-Up there is, but randomisation makes it impossible to learn.
 
 
-If understood so far, say OK and I will share the article further.
+If understood so far, say OK and I will proceed with the tasks we need to get done.
 
 
