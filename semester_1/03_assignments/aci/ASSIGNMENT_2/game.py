@@ -121,23 +121,38 @@ class CatchUpGame:
         self.player1 = player1
         self.player2 = player2
 
+    def is_game_over(self):
+        return not self.available_numbers
+
+    def get_winner(self):
+        if self.player1.score > self.player2.score:
+            return self.player1
+        elif self.player2.score > self.player1.score:
+            return self.player2
+        else:
+            return None
+
     def play_game(self):
-        while self.available_numbers:
+        while not self.is_game_over():
             print(f"Available numbers: {sorted(list(self.available_numbers))}")
 
             # Player 1's turn
-            p1_choice = self.player1.make_move(self.available_numbers, self.player2.score)
+            p1_choice = self.player1.make_move(
+                self.available_numbers.copy(), self.player2.score
+            )
             if p1_choice is not None:
-                self.available_numbers -= {p1_choice}
+                self.available_numbers.remove(p1_choice)
                 self.player1.score += p1_choice
                 print(f"{self.player1.name} chooses: {p1_choice}")
             else:
                 break
 
             # Player 2's turn
-            p2_choice = self.player2.make_move(self.available_numbers, self.player1.score)
+            p2_choice = self.player2.make_move(
+                self.available_numbers.copy(), self.player1.score
+            )
             if p2_choice is not None:
-                self.available_numbers -= {p2_choice}
+                self.available_numbers.remove(p2_choice)
                 self.player2.score += p2_choice
                 print(f"{self.player2.name} chooses: {p2_choice}")
             else:
@@ -145,10 +160,9 @@ class CatchUpGame:
 
             print(f"{self.player1.name} score: {self.player1.score}, {self.player2.name} score: {self.player2.score}\n")
 
-        if self.player1.score > self.player2.score:
-            print(f"{self.player1.name} wins!")
-        elif self.player2.score > self.player1.score:
-            print(f"{self.player2.name} wins!")
+        winner = self.get_winner()
+        if winner:
+            print(f"{winner.name} wins!")
         else:
             print("It's a tie!")
 
