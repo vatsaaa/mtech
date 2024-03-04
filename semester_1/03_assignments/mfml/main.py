@@ -4,7 +4,7 @@ import numpy as np
 from pprint import pprint
 import random
 import sympy as sy
-
+import sys
 from utils.utils import *
 
 random.seed(student_id)
@@ -105,41 +105,6 @@ def power_method_new(matrix, num_iterations):
     # Return the final eigenvalue, normalized eigenvector, and unnormalized eigenvector
     return eigenvalue[0][0], normalized_eigenvectors[-1], unnormalized_eigenvectors[-1]
 
-def f(x, y):
-    # print("\tf:")
-    val = 10 * x**4 - 20 * x**2 * y + x**2 + 10 * y**2 - 2 * x + 1
-    # print("\t\tx:", x, "y:", y, "f(x, y):", val)
-    return val
-
-def df_dx(x, y):
-    # print("\tdf_dx:")
-    grad_x = 40 * x**3 - 40 * x * y + 2 * x - 2
-    # print("\t\tx:", x, "y:", y, "grad_x:", grad_x)
-    return grad_x
-
-def df_dy(x, y):
-    # print("\tdf_dy:")
-    grad_y = -20 * x**2 + 20 * y
-    # print("\t\tx:", x, "y:", y, "grad_y:", grad_y)
-    return grad_y
-
-def armijo_rule(x, y, alpha, beta, c):
-    grad_x = df_dx(x, y)
-    grad_y = df_dy(x, y)
-    while f(x - alpha * grad_x, y - alpha * grad_y) > f(x, y) - c * alpha * (grad_x**2 + grad_y**2):
-        alpha *= beta
-    return alpha, grad_x, grad_y
-
-def gradient_descent(x, y, alpha, beta, c, niters: int=100):
-    for i in range(niters):
-        print("Iteration ", i+1, ": ")
-        alpha, grad_x, grad_y = armijo_rule(x, y, alpha, beta, c)
-        x_new = x - alpha * grad_x
-        y_new = y - alpha * grad_y
-        x, y = x_new, y_new
-        print("x:", x, "y:", y, "Step size(alpha):", alpha, "f(x, y):", f(x, y))
-    return x, y, alpha
-
 def C(x):
     """
     C(x) = 2 * x1 ** 2 + x1 * x2 + 20 * x2 ** 2 - 5 * x1 - 3* x2
@@ -176,6 +141,22 @@ def parse_arguments():
     parser = argparse.ArgumentParser(description='Process command line arguments.')
     parser.add_argument('question', choices=['q1', 'q2', 'q3', 'q4'], help='Specify the question to run')
     return parser.parse_args()
+
+def f(x, y):
+    return (10 * x**4 - 20 * x**2 * y + x**2 + 10 * y**2 - 2 * x + 1)
+
+def df_dx(x, y):
+    return (40 * x**3 - 40 * x * y + 2 * x - 2)
+
+def df_dy(x, y):
+    return (-20 * x**2 + 20 * y)
+
+def armijo_rule(x, y, alpha, beta, c):
+    grad_x = df_dx(x, y)
+    grad_y = df_dy(x, y)
+    while f(x - alpha * grad_x, y - alpha * grad_y) > f(x, y) - c * alpha * (grad_x**2 + grad_y**2) + sys.float_info.epsilon:
+        alpha *= beta
+    return alpha, grad_x, grad_y
 
 def main():
     np.set_printoptions(suppress=True, precision=5)
@@ -252,20 +233,25 @@ def main():
         print("==========================================================================")
     elif args.question == 'q2':
         # Initial point
-        x0 = 1.1
-        y0 = 1.1
+        x0 = 1.15
+        y0 = 1.15
 
         # Parameters for Armijo's Rule
         alpha = 1
         beta = 0.5
-        c = 0.1
+        c = 0.25
 
-        # Run gradient descent
-        print("Armijo's Rule parameters - BEFORE: ", "x:", x0, "y: ", y0, "alpha:", alpha, "beta:", beta, "c:", c)
-        x_star, y_star, alpha = gradient_descent(x0, y0, alpha, beta, c)
+        print(f"Initial point: Initial step size = {alpha}\tx0 = {x0}\ty0 = {y0}\tf(x0, y0) = {f(x0, y0)}")
+        for i in range(2000000):
+            optimal_alpha, grad_x, grad_y = armijo_rule(x0, y0, alpha, beta, c)
+            x0 -= optimal_alpha * grad_x
+            y0 -= optimal_alpha * grad_y
+            objective_value = f(x0, y0)
 
-        print("Optimal point: (", x_star, ",", y_star, ")", "f(x_star, y_star): ", f(x_star, y_star))
-        print("Armijo's Rule parameters - AFTER: ", "alpha:", alpha, "beta:", beta, "c:", c)
+            if objective_value <= sys.float_info.epsilon:
+                break
+            
+            print(f"Iteration {i+1}: Optimal step size = {optimal_alpha}\tx = {x0}\ty = {y0}\tf(x, y) = {objective_value}")
     elif args.question == 'q3':
         lo = -10
         hi = 10
@@ -280,7 +266,15 @@ def main():
                 Z[i][j] = C(np.array([X[i][j], Y[i][j]]).reshape(2,1))
         # start Gradient Descent
         GD(np.array([x1,x2]).reshape(2,1),X,Y,Z, C, dC, iters, learning_rate)
+
+
+
+
     elif args.question == 'q4':
+
+
+
+
         lo = -10
         hi = 10
         x1 = round(random.uniform(lo,0),4)
