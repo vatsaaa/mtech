@@ -1,3 +1,4 @@
+# Question 4
 In a comparison of the cleaning action of four detergents, 20 pieces of white cloth were
 first soiled with India ink. The clothes were then washed under controlled conditions with 5
 pieces washed by each of the detergents. Unfortunately, three pieces of cloth were ‘lost’ in
@@ -31,12 +32,12 @@ test the hypothesis of no difference between the four brands as regards mean
 whiteness readings after washing at 5% LOS.
 
 
+# Answer 4
 To test the hypothesis that after washing there is no difference between mean whiteness readings 
 of the four brands, we use Analysis of Variance (ANOVA) as there are multiple groups to compare.
 
 
-
-Step 1: Formulate Hypotheses:
+## Step 1: Setup the Hypotheses
 Null Hypothesis (H₀): There is no significant difference in mean whiteness readings among the four detergents.
 H₀: μ₁ = μ₂ = μ₃ = μ₄
 
@@ -44,7 +45,7 @@ Alternative Hypothesis (H₁): There is a significant difference in mean whitene
 H₁: At least one of the means (μ₁, μ₂, μ₃, μ₄) is different
 
 
-Step 2: Degrees of Freedom:
+## Step 2: Degrees of Freedom:
 Calculate the degrees of freedom for between-groups (df-between) and within-groups (df-within)
 
 Degrees of Freedom Between (df-between):
@@ -70,7 +71,7 @@ df-within = 17 - 4
 df-within = 13
 
 
-Step 3: Calculate F-Statistic:
+## Step 3: Calculate F-Statistic:
 F = MeanSquare-between/MeanSquare-within
 nᵢ: number of observations in group 
 X-barᵢ: mean of the group 
@@ -81,7 +82,7 @@ X-bar-grand = (1/N) * ( ∑       ∑     Xᵢⱼ)
                         ᵢ₌₁     ⱼ₌₁
 
 => X-bar-grand = (77+81+61+76+69+74+66+58+73+78+57+69+63+76+85+77+64)/17
-=> X-bar-grand = 70.82353
+=> X-bar-grand = 70.8236
 
 X-bar-A = (77+81+61+76+69)/5 = 72.8
 X-bar-B = (74+66+58)/3 = 66
@@ -148,17 +149,17 @@ F = 0.84374
 
 
 
-Step 4: Critical Value:
+## Step 4: Critical Value:
 Determine the critical F-value from the F-distribution table for the chosen level of significance
 (5% in this case) and degrees of freedom. 
 
 
-Step 5: Perform ANOVA:
+## Step 5: Perform ANOVA:
 Use the whiteness readings data for each detergent to calculate the ANOVA statistic.
 The ANOVA test compares the variation within each group to the variation between groups.
 
 
-Step 6: Decision:
+## Step 6: Decision:
 Compare the calculated F-statistic with the critical F-value.
 If the calculated F-statistic is greater than the critical value, reject the null hypothesis.
 
