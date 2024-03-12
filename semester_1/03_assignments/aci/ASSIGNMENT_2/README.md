@@ -1,7 +1,7 @@
-This code is written in Prolog, a logic programming language. It defines a set of rules to determine the best water source for a community based on various location factors such as proximity to rivers, lakes, and beaches, rainfall intensity, and aquifer type.
+# Introduction
+WaterSource.pl file is code written in Prolog, a logic programming language. It defines a set of rules to determine the best water source for a community based on various location factors such as proximity to rivers, lakes, and beaches, rainfall intensity, and aquifer type.
 
-Let's go through the code step by step:
-
+## Code walkthrough:
 The code starts by defining rules to determine the proximity to water sources. There are three rules: close_to_river, close_to_lake, and close_to_beach. Each rule prompts the user to enter the distance from the location to the nearest river, lake, or beach, respectively. The distance is read from the user using the read predicate. These rules also check if the distance is less than a certain threshold.
 
 Next, the code defines rules to determine the rainfall intensity. There are three rules: low_rainfall, medium_rainfall, and high_rainfall. Similar to the previous rules, the user is prompted to enter the average monthly rainfall amount in millimeters. The rainfall amount is read from the user, and these rules check if the amount falls within specific ranges.
