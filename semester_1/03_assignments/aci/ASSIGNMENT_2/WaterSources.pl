@@ -38,8 +38,8 @@ sandy_aquifer :-
 
 /* Rules to predict the water source based on the decision tree */
 best_water_source(groundwater) :-
-  close_to_river(Distance), Distance >= 20,
-  close_to_lake(Distance), Distance >= 14,
+  close_to_lake(Distance), Distance >= 10,
+  close_to_river(Distance), Distance >= 8,
   not(close_to_beach(_)).
 
 best_water_source(lake) :-
