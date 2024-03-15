@@ -10,135 +10,25 @@ class GameState:
         self.player2_score = 0
 
     def copy(self):
-        # Corrected copy method, directly assigning values to attributes
         copy_state = GameState(self.n)  # Create an empty GameState object
         copy_state.available_numbers = self.available_numbers.copy()  # Assign copied available numbers
         copy_state.player1_score = self.player1_score
         copy_state.player2_score = self.player2_score
         return copy_state
 
-class Strategy(ABC):
+"""
+GameStrategy (Abstract Base Class): Defines the structure of a game strategy, 
+including the abstract methods move() and get_candidate_numbers(). This class
+serves as a blueprint for specific strategies.
+"""
+class GameStrategy(ABC):
     def __init__(self):
         pass
 
     @abstractmethod
-    def make_move(self, game_state: GameState):
+    def move(self, game_state: GameState):
         pass
 
-    def get_candidate_numbers(self, game_state: GameState):
-        pass
-
-class BackwardInductionStrategy(Strategy):
-    def __init__(self, maximizing_player=True):
-        super().__init__()
-        self.maximizing_player = maximizing_player
-
-    def make_move(self, game_state: GameState):
-        if not game_state.available_numbers:
-            print("Error: No available numbers")
-            return None
-
-        # Create a queue to store game states
-        queue = deque([game_state.copy()])
-
-        # Alpha-beta pruning variables
-        alpha = float("-inf")  # Best score for maximizing player
-        beta = float("inf")  # Best score for minimizing player
-
-        while queue:
-            current_state = queue.popleft()
-
-            # Check all possible moves and their outcomes
-            for number in current_state.available_numbers:
-                new_state = current_state.copy()
-                new_state.available_numbers.remove(number)
-                new_state_score = new_state.player1_score + number
-
-                # Check for base case (opponent has no moves)
-                opponent_numbers = new_state.available_numbers.copy()  # Use a copy to avoid modifying original
-                if not opponent_numbers:
-                    score = self.player1_score  # Player's score (already maximized)
-                    new_state.player1_score = score
-                    queue.append(new_state)
-                    continue
-
-                # Check if the game is over for the opponent
-                if not new_state.available_numbers:
-                    # If maximizing player, score is the current player's score
-                    # If minimizing player, score is the opponent's score (0)
-                    score = new_state_score if self.maximizing_player else 0
-                    new_state.player1_score = score
-                    queue.append(new_state)
-                    continue
-
-                # Simulate the opponent's move (using updated _simulate_opponent_move)
-                opponent_score = self._simulate_opponent_move(opponent_numbers)
-                new_state.player2_score = opponent_score
-
-                # Add the simulated state to the queue (after evaluating the opponent's move)
-                if self.maximizing_player:
-                    score = max(new_state_score - opponent_score, current_state.player1_score)
-                    # Apply alpha-beta pruning
-                    alpha = max(alpha, score)
-                    if alpha >= beta:
-                        break  # Prune branches that won't be explored
-                else:
-                    score = min(new_state_score - opponent_score, current_state.player1_score)
-                    # Apply alpha-beta pruning
-                    beta = min(beta, score)
-                    if beta <= alpha:
-                        break  # Prune branches that won't be explored
-
-                new_state.player1_score = score
-                queue.append(new_state)
-
-        # Choose the move with the highest score (or lowest for minimizing player)
-        try:
-            best_state = max(queue, key=lambda x: x.player1_score)
-            # Choose the return value based on your application's logic:
-            # 1. Return the chosen number: return best_state.player1_score - game_state.player1_score
-            # 2. Return the score gained by the move: return best_state.available_numbers
-        except ValueError:
-            print("Error: No valid moves found")
-            return None
-     
-    def _simulate_opponent_move(self, available_numbers):
-        opponent_score, _ = min(
-            ((number, available_numbers.copy() - {number})  # Create remaining_numbers within the loop
-            for number in available_numbers),
-            key=lambda x: x[0],  # Choose the move that minimizes opponent's score
-        )
-        return opponent_score
-
-class ChooseExtremeNumberStrategy(Strategy):
-    def __init__(self, choose_max=True):
-        super().__init__()
-        self.choose_max = choose_max
-
-    def get_candidate_numbers(self, game_state: GameState):
-        available_numbers = game_state.available_numbers
-        if available_numbers:
-            if self.choose_max:
-                return [max(available_numbers)]
-            else:
-                return [min(available_numbers)]
-        else:
-            return []
-
-    def make_move(self, game_state: GameState):
-        available_numbers = game_state.available_numbers
-        player_score = game_state.player1_score
-        opponent_score = game_state.player2_score
-
-        if available_numbers:
-            if self.choose_max:
-                return max(available_numbers)
-            else:
-                return min(available_numbers)
-        else:
-            return None
-
-class DynamicStrategy(Strategy):
     def get_candidate_numbers(self, game_state: GameState):
         available_numbers = game_state.available_numbers
         player_score = game_state.player1_score  # Adjust for player 2 if needed
@@ -156,122 +46,160 @@ class DynamicStrategy(Strategy):
             # If behind, choose all available numbers that don't exceed the opponent's score
             return list(available_numbers)
 
-    def make_move(self, game_state: GameState):
-        candidates = self.get_candidate_numbers(game_state)
-        return random.choice(candidates) if candidates else None
-
-class MaximizeLeadStrategy(Strategy):
-    def __init__(self):
+"""
+MinimaxStrategy class has the combined logic of both Minimax and ⍺-β pruning techniques,
+it also incorporates the backward induction approach to find the best move for the player
+"""
+class MinimaxStrategy(GameStrategy):
+    def __init__(self, maximizing_player: bool=True):
         super().__init__()
+        self.maximizing_player = maximizing_player
 
-    def make_move(self, game_state: GameState):
-        available_numbers = game_state.available_numbers
-        player_score = game_state.player1_score  # Adjust for player 2 if needed
-        opponent_score = game_state.player2_score  # Adjust for player 1 if needed
+    """
+    move() method: applies ⍺-β pruning to efficiently search the game tree and avoid 
+    exploring unpromising branches. This method selects the best move for the current
+    player based on the Minimax algorithm, considering the opponent's potential moves 
+    and maximizing the player's score while minimizing the opponent's score.
+    """
+    def move(self, game_state: GameState):
+        if not game_state.available_numbers:
+            print("Error: No available numbers")
+            return None
 
-        # Calculate lead
-        lead = player_score - opponent_score
-
-        # Initialize variables for tracking
         best_move = None
-        max_lead_after_move = float("-inf")  # Negative infinity
+        alpha = float("-inf")
+        beta = float("inf")
 
-        # Find the move that maximizes the lead
-        for number in available_numbers:
-            potential_lead = lead + number  # Calculate potential lead
-            if potential_lead > max_lead_after_move:
-                max_lead_after_move = potential_lead
-                best_move = number
+        queue = deque([game_state.copy()])
+
+        while queue:
+            current_state = queue.popleft()
+
+            for number in current_state.available_numbers:
+                new_state = current_state.copy()
+                new_state.available_numbers.remove(number)
+                new_state_score = new_state.player1_score + number
+
+                # Check if the game is over for the opponent
+                if not new_state.available_numbers:
+                    score = new_state_score if self.maximizing_player else 0
+                else:
+                    # Simulate opponent's move
+                    opponent_score = self._simulate_opponent_move(new_state.available_numbers)
+                    new_state.player2_score = opponent_score
+
+                    # Recursively evaluate the next move
+                    next_move_score = self._minimax(new_state, alpha, beta, maximizing=not self.maximizing_player)
+                    score = new_state_score - opponent_score if self.maximizing_player else next_move_score
+
+                    score, _ = self._alpha_beta_pruning(alpha, beta, score, number)
+
+                # Check if pruning condition is met and break out of the loop if necessary
+                if self.maximizing_player:
+                    alpha = max(alpha, score)
+                    if alpha >= beta:
+                        break
+                else:
+                    beta = min(beta, score)
+                    if beta <= alpha:
+                        break
+
+                if score > alpha:
+                    alpha = score
+                    best_move = number
+
+                queue.append(new_state)
 
         return best_move
 
-class MinimizeLeadStrategy(Strategy):
-    def make_move(self, game_state: GameState):
-        player_score = game_state.player1_score
-        opponent_score = game_state.player2_score
+    def _alpha_beta_pruning(self, alpha, beta, score, number):
+            if self.maximizing_player:
+                alpha = max(alpha, score)
+                if alpha >= beta:
+                    return alpha, None
+            else:
+                beta = min(beta, score)
+                if beta <= alpha:
+                    return beta, None
+            return score, number
 
-        # Introduce a counter to limit loop iterations
-        max_iterations = len(game_state.available_numbers)  # Limit based on available numbers
-        iteration = 0
+    """
+    _minimax() is a private method that performs the recursive evaluation of 
+    game states, considering moves of both maximizing and minimizing players
+    """
+    def _minimax(self, game_state, alpha, beta, maximizing=True):
+        if not game_state.available_numbers:
+            return game_state.player1_score if maximizing else 0
 
-        while iteration < max_iterations:
-            number = random.choice(list(game_state.available_numbers))
-            if player_score + number <= opponent_score:
-                return number
+        best_score = float("-inf") if maximizing else float("inf")
+        for number in game_state.available_numbers:
+            new_state = game_state.copy()
+            new_state.available_numbers.remove(number)
+            new_state_score = new_state.player1_score + number
 
-            iteration += 1
+            # Simulate opponent's move
+            opponent_score = self._simulate_opponent_move(new_state.available_numbers)
+            new_state.player2_score = opponent_score
 
-        # If no suitable number is found, choose a number that minimizes lead increase
-        return min(game_state.available_numbers)
+            score = new_state_score - opponent_score + self._minimax(new_state, alpha, beta, maximizing=not maximizing)
+            best_score = max(best_score, score) if maximizing else min(best_score, score)
+            alpha = max(alpha, score) if maximizing else min(alpha, score)
+            if alpha >= beta:
+                break
+            if not maximizing and beta <= alpha:
+                break
+        return best_score
 
-class RandomizedStrategy(Strategy):
-    def get_candidate_numbers(self, game_state: GameState):
-        player_score = game_state.player1_score
-        opponent_score = game_state.player2_score
-        available_numbers = game_state.available_numbers
-        available_subsets = [subset for subset in available_numbers if subset >= opponent_score - player_score]
-        return available_subsets
-
-    def make_move(self, game_state: GameState):
-        candidates = self.get_candidate_numbers(game_state)
-        return random.choice(candidates) if candidates else None
-
-class StrategyFactory:
-    def __init__(self):
-        self.strategies = {
-            "1": ChooseExtremeNumberStrategy(choose_max=True),
-            "2": ChooseExtremeNumberStrategy(choose_max=False),
-            "3": DynamicStrategy(),
-            "4": RandomizedStrategy(),
-            "5": BackwardInductionStrategy(),
-            "6": MinimizeLeadStrategy(),
-            "7": MaximizeLeadStrategy(),
-        }
-
-    def get_strategy(self, choice):
-        if choice in self.strategies:
-            return self.strategies[choice]
-        else:
-            raise ValueError(f"Invalid strategy choice: {choice}")
+    def _simulate_opponent_move(self, available_numbers):
+        if not available_numbers:
+            return 0  # Return a default score when no numbers are available
+        return min(available_numbers)
 
 class Player:
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name = name
         self.score = 0
         self.strategy = None
 
-    def choose_strategy(self):
-        factory = StrategyFactory()
+    def choose_strategy(self) -> bool:
+        choice = int(input(f"{self.name}, select (1) to become maximizer or (2) to be minimizer?"))
 
-        while True:
-            print("Available strategies:")
-            for key, strategy in factory.strategies.items():
-                print(f"{key}: {strategy.__class__.__name__}")
+        if choice is not 1:
+            print("Invalid choice. Defaulting to maximizer.")
+            choice = 1
+        
+        self.strategy = MinimaxStrategy(True) if choice == 1 else MinimaxStrategy(False)
 
-            choice = input("Choose your strategy (1-7): ")
-            try:
-                self.strategy = factory.get_strategy(choice)
-                break
-            except ValueError as e:
-                print(e)
+        return not choice
 
     def make_move(self, game_state: GameState):
-        if self.strategy is None:
-            self.choose_strategy()
         try:
-            return self.strategy.make_move(game_state.copy())  # Pass a copy of the game state
-        except (TypeError, ValueError, AttributeError) as e:
+            move = self.strategy.move(game_state.copy())
+            if move is not None:
+                print(f"{self.name} chooses: {move}")
+            else:
+                print(f"{self.name} cannot make a move.")
+            return move
+        except (IndexError, ValueError) as e:
             print(f"Error making move: {e}")
             return None
 
 class CatchUpGame:
-    def __init__(self, n, player1, player2):
+    def __init__(self, n: int, player1: Player, player2: Player):
         self.player1 = player1
         self.player2 = player2
         self.game_state = GameState(n)
+      
+        # Randomly choose the starting player and set their preferred strategy
+        self.current_player = random.choice([self.player1, self.player2])
+        print(f"Randomly chose {self.current_player.name} as starting player")
+        
+        self.current_player.choose_strategy()
 
     def is_game_over(self):
-        return not self.game_state.available_numbers
+        return (not self.game_state.available_numbers) or \
+           (self.player1.strategy.move(self.game_state.copy()) is None and 
+            self.player2.strategy.move(self.game_state.copy()) is None)
 
     def get_winner(self):
         if self.player1.score > self.player2.score:
@@ -281,7 +209,10 @@ class CatchUpGame:
         else:
             return None
 
-    def play_game(self):
+    def play(self):
+        print(f"Starting game Catch-up Numbers: {self.player1.name} vs. {self.player2.name}")
+        self.current_player.choose_strategy()
+
         while not self.is_game_over():
             print(f"Available numbers: {sorted(list(self.game_state.available_numbers))}")
 
@@ -292,6 +223,7 @@ class CatchUpGame:
                 self.player1.score += p1_choice
                 print(f"{self.player1.name} chooses: {p1_choice}")
             else:
+                print(f"{self.player1.name} cannot make a move.")
                 break
 
             # Player 2's turn
@@ -301,6 +233,7 @@ class CatchUpGame:
                 self.player2.score += p2_choice
                 print(f"{self.player2.name} chooses: {p2_choice}")
             else:
+                print(f"{self.player2.name} cannot make a move.")
                 break
 
             print(f"{self.player1.name} score: {self.player1.score}, {self.player2.name} score: {self.player2.score}\n")
@@ -311,10 +244,13 @@ class CatchUpGame:
         else:
             print("It's a tie!")
 
-# Try with n=5 and two players with different strategies
-if __name__ == "__main__":
+def main():
     player1 = Player("Player 1")
     player2 = Player("Player 2")
 
-    catch_up_game = CatchUpGame(25, player1, player2)
-    catch_up_game.play_game()
+    n = int(input("Enter the number of numbers (n): "))
+    catch_up_game = CatchUpGame(n, player1, player2)
+    catch_up_game.play()
+
+if __name__ == "__main__":
+    main()
