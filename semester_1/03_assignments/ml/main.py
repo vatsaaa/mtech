@@ -1,4 +1,3 @@
-import os, pprint
 from imblearn.over_sampling import SMOTE
 import numpy as np
 import pandas as pd
@@ -19,8 +18,55 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder, OrdinalEncoder, S
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
-import time
+import platform, time
 
+if platform.system() == "Windows":
+    import psutil
+elif platform.system() == "Darwin" or platform.system() == "Linux":
+    import resource
+
+if platform.system() == "Windows":
+    def track_time_and_space(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            start_memory = psutil.Process().memory_info().rss
+
+            result = func(*args, **kwargs)
+
+            end_time = time.time()
+            end_memory = psutil.Process().memory_info().rss
+
+            print(platform.system(), start_memory, end_memory)
+
+            execution_time = end_time - start_time
+            memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
+
+            print(f"Execution time: {execution_time} seconds")
+            print(f"Memory usage: {memory_usage} KB")
+
+            return result, execution_time, memory_usage
+
+        return wrapper
+else:
+    def track_time_and_space(func):
+        def wrapper(*args, **kwargs):
+            start_time = time.time()
+            start_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+            result = func(*args, **kwargs)
+
+            end_time = time.time()
+            end_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+
+            execution_time = end_time - start_time
+            memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
+
+            print(f"Execution time: {execution_time} seconds")
+            print(f"Memory usage: {memory_usage} KB")
+
+            return result, execution_time, memory_usage
+
+        return wrapper
 
 def load_data(filename: str) -> pd.DataFrame:
     df = pd.read_csv(filename, index_col = 0, encoding='utf-8')
@@ -281,6 +327,7 @@ def create_model(model_name: str) -> object:
     
     return model
 
+@track_time_and_space
 def run(df, model, col_types: dict, model_name: str, test_size: float = 0.2):
     X_test, y_test, pipeline = split_data_fit_model(df, col_types, model=model, test_size=test_size)
     cm, ypred = predict(X_test, y_test, pipeline)
@@ -461,13 +508,11 @@ if __name__ == "__main__":
     for model_info in pred_models:
         model_name = model_info["name"]
         for ts in model_info["test_size"]:
-            start_time = time.time()
             test_size = float(ts) / 100
             model_identifier = model_info["name"]
         
             model = create_model(model_name)
     
             run(df, model, col_types, model_name=model_identifier, test_size=test_size)
-            end_time = time.time()
 
             print(f"Time taken for {model_name} with test size {test_size} is {end_time - start_time} seconds")
