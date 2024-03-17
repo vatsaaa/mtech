@@ -41,8 +41,7 @@ if platform.system() == "Windows":
             execution_time = end_time - start_time
             memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
 
-            print(f"Execution time: {execution_time} seconds")
-            print(f"Memory usage: {memory_usage} KB")
+            print(f"Execution time: {execution_time} seconds | Memory usage: {memory_usage} KB")
 
             return result, execution_time, memory_usage
 
@@ -61,8 +60,7 @@ else:
             execution_time = end_time - start_time
             memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
 
-            print(f"Execution time: {execution_time} seconds")
-            print(f"Memory usage: {memory_usage} KB")
+            print(f"Execution time: {execution_time} seconds | Memory usage: {memory_usage} KB")
 
             return result, execution_time, memory_usage
 
@@ -514,5 +512,3 @@ if __name__ == "__main__":
             model = create_model(model_name)
     
             run(df, model, col_types, model_name=model_identifier, test_size=test_size)
-
-            print(f"Time taken for {model_name} with test size {test_size} is {end_time - start_time} seconds")
