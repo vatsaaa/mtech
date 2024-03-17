@@ -19,6 +19,8 @@ from sklearn.preprocessing import LabelEncoder, OneHotEncoder, OrdinalEncoder, S
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
 
+import time
+
 
 def load_data(filename: str) -> pd.DataFrame:
     df = pd.read_csv(filename, index_col = 0, encoding='utf-8')
@@ -459,9 +461,13 @@ if __name__ == "__main__":
     for model_info in pred_models:
         model_name = model_info["name"]
         for ts in model_info["test_size"]:
+            start_time = time.time()
             test_size = float(ts) / 100
             model_identifier = model_info["name"]
         
             model = create_model(model_name)
     
             run(df, model, col_types, model_name=model_identifier, test_size=test_size)
+            end_time = time.time()
+
+            print(f"Time taken for {model_name} with test size {test_size} is {end_time - start_time} seconds")
