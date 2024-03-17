@@ -446,22 +446,22 @@ if __name__ == "__main__":
     correlatioin_analysis(df)
 
 
-    # # Drop "Merchant Location History" since it is code only, which cannot
-    # # be standardised / normalised without mapping code to actual location 
-    # df = feature_engineering(df).drop(['Merchant Location History'], axis=1)
+    # Drop "Merchant Location History" since it is code only, which cannot
+    # be standardised / normalised without mapping code to actual location 
+    df = feature_engineering(df).drop(['Merchant Location History'], axis=1)
 
-    # # Select features to process and the target variable
-    # col_types = get_column_types(df)
-    # sorted_features, y, X = get_ig_for_features(df)
-    # plot_ig_for_features(sorted_features)
+    # Select features to process and the target variable
+    col_types = get_column_types(df)
+    sorted_features, y, X = get_ig_for_features(df)
+    plot_ig_for_features(sorted_features)
 
-    # # Run the models to evaluate for various test sizes and hyperparameters
-    # for model_info in pred_models:
-    #     model_name = model_info["name"]
-    #     for ts in model_info["test_size"]:
-    #         test_size = float(ts) / 100
-    #         model_identifier = model_info["name"]
+    # Run the models to evaluate for various test sizes and hyperparameters
+    for model_info in pred_models:
+        model_name = model_info["name"]
+        for ts in model_info["test_size"]:
+            test_size = float(ts) / 100
+            model_identifier = model_info["name"]
         
-    #         model = create_model(model_name)
+            model = create_model(model_name)
     
-    #         run(df, model, col_types, model_name=model_identifier, test_size=test_size)
+            run(df, model, col_types, model_name=model_identifier, test_size=test_size)
