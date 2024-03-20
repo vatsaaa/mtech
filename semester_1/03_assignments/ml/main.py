@@ -338,7 +338,7 @@ if __name__ == "__main__":
     pred_models = [
         {
             "name": "AdaBoostClassifier",
-            "test_size": [15, 20, 25],
+            "test_size": [{"default": [15]}, {"others": [20, 25]}],
             "hp_list": {
                 "n_estimators": 50, 
                 "learning_rate": 1.0, 
@@ -351,7 +351,7 @@ if __name__ == "__main__":
         },
         {
             "name": "DecisionTreeClassifier",
-            "test_size": [15, 20, 25],
+            "test_size": [{"default": [15]}, {"others": [20, 25]}],
             "hp_list": {
                 "criterion": 'gini', 
                 "max_depth": "None", 
@@ -371,17 +371,8 @@ if __name__ == "__main__":
                          "4. min_samples_leaf - minimum number of samples required to be at a leaf node"]
         },
         {
-            "name": "GaussianNB",
-            "test_size": [15, 20, 25],
-            "hp_list": {
-                "var_smoothing": "1e-09"
-            },
-            "model_identifier": "Gaussian NB " + "15",
-            "Comments": ["1. var_smoothing - portion of the largest variance of all features that is added to variances for calculation stability"]
-        },
-        {
             "name": "GradientBoostingClassifier",
-            "test_size": [15, 20, 25],
+            "test_size": [{"default": [15]}, {"others": [20, 25]}],
             "hp_list": {
                 "n_estimators": [100, 200, 300, 400, 500],
                 "learning_rate": [0.1, 0.35, 0.55, 0.85, 1.00],
@@ -409,7 +400,7 @@ if __name__ == "__main__":
         },
         {
             "name": "KNeighborsClassifier",
-            "test_size": [15, 20, 25],
+            "test_size": [{"default": [15]}, {"others": [20, 25]}],
             "hp_list": {
                 "n_neighbors": [5, 10, 15, 20],
                 "weights": ["uniform", "distance"],
@@ -427,7 +418,7 @@ if __name__ == "__main__":
         },
         {
             "name": "LogisticRegression",
-            "test_size": [15, 20, 25],
+            "test_size": [{"default": [15]}, {"others": [20, 25]}],
             "hp_list": {
                 "penalty": ["l2", "l1", "elasticnet", "none"],
                 "dual": ["False", "True"],
@@ -452,7 +443,7 @@ if __name__ == "__main__":
         },
         {
            "name": "RandomForestClassifier",
-           "test_size": [15, 20, 25],
+           "test_size": [{"default": [15]}, {"others": [20, 25]}],
            "hp_list": {
                 "n_estimators": [100],
                 "criterion": ["gini"],
@@ -478,12 +469,9 @@ if __name__ == "__main__":
         }
     ]
 
-
     filename = "data/Group21_Financial_Transactions_Dataset.csv"
     df = load_data(filename=filename)
-
     check_class_imbalance(df)
-
     correlatioin_analysis(df)
 
     # Handle imbalanced class and check that imbalance
@@ -499,16 +487,24 @@ if __name__ == "__main__":
 
     # Select features to process and the target variable
     col_types = get_column_types(df)
-    sorted_features, y, X = get_ig_for_features(df)
-    plot_ig_for_features(sorted_features)
+    # sorted_features, y, X = get_ig_for_features(df)
+    # plot_ig_for_features(sorted_features)
 
     # Run the models to evaluate for various test sizes and hyperparameters
     for model_info in pred_models:
-        model_name = model_info["name"]
-        for ts in model_info["test_size"]:
-            test_size = float(ts) / 100
-            model_identifier = model_info["name"]
-        
-            model = create_model(model_name)
-    
+        test_size = float(model_info["test_size"][0]["default"][0]) / 100
+        model_identifier = model_info["name"] + " " + str(model_info["test_size"][0]["default"][0]) 
+
+        model = create_model(model_info["name"])
+
+        print("Running model: ", model_identifier, "...")
+        run(df, model, col_types, model_name=model_identifier, test_size=test_size)
+        print("Completed run for model: ", model_identifier)
+
+        # Now run the model for other test sizes
+        for os in model_info["test_size"][1]["others"]:
+            test_size = float(os) / 100
+            model_identifier = model_info["name"] + " " + str(os)
+
+            # Model was already created, so no need to create one more    
             run(df, model, col_types, model_name=model_identifier, test_size=test_size)
