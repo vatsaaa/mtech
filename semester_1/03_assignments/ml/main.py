@@ -12,11 +12,18 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, auc, classification_report, confusion_matrix, roc_auc_score, roc_curve
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, OrdinalEncoder, StandardScaler
 from sklearn.svm import SVC
 from sklearn.tree import DecisionTreeClassifier
+
+from sklearn.exceptions import UndefinedMetricWarning
+import sys, warnings
+
+with warnings.catch_warnings():
+    warnings.simplefilter("ignore", category=UndefinedMetricWarning)
+    warnings.simplefilter(action='ignore', category=FutureWarning)
 
 import platform, time
 
@@ -179,6 +186,8 @@ def get_ig_for_features(df: pd.DataFrame):
     X = df.drop(['Is Fraudulent'], axis=1)
     y = df['Is Fraudulent']
 
+    sorted_features = []
+
     # Encode categorical features
     categorical_features = X.select_dtypes(include=['object']).columns
     for feature in categorical_features:
@@ -236,7 +245,7 @@ def split_data_fit_model(df, col_types: dict, model, test_size: float = 0.2):
                             ("classifier", model)])
   pipeline.fit(X_train, y_train)
 
-  return X_test, y_test, pipeline
+  return X_test, y_test, X_train, y_train, pipeline
 
 def predict(xtest, ytest, pipeline):
   ypred = pipeline.predict(xtest)
@@ -309,13 +318,13 @@ def create_model(model_name: str) -> object:
     elif model_name == "DecisionTreeClassifier":
         model = DecisionTreeClassifier(random_state=71)
     elif model_name == "GaussianNB":
-        model = GaussianNB(random_state=71, var_smoothing=1e-09)
+        model = GaussianNB(random_state=71)
     elif model_name == "GradientBoostingClassifier":
         model = GradientBoostingClassifier(random_state=71)
     elif model_name == "KNeighborsClassifier":
-        model = KNeighborsClassifier()
+        model = KNeighborsClassifier(random_state=71)
     elif model_name == "LogisticRegression":
-        model = LogisticRegression(random_state=71, max_iter=1000, C=1.0, solver='lbfgs')
+        model = LogisticRegression(random_state=71)
     elif model_name == "RandomForestClassifier":
         model = RandomForestClassifier(random_state=71)
     elif model_name == "SVC":
@@ -327,12 +336,19 @@ def create_model(model_name: str) -> object:
 
 @track_time_and_space
 def run(df, model, col_types: dict, model_name: str, test_size: float = 0.2):
-    X_test, y_test, pipeline = split_data_fit_model(df, col_types, model=model, test_size=test_size)
+    X_test, y_test, X_train, y_train, pipeline = split_data_fit_model(df, col_types, model=model, test_size=test_size)
     cm, ypred = predict(X_test, y_test, pipeline)
     
     print_model_performance(cm, y_test, ypred, model_name=model_name)
     plot_confusion_matrix(cm, model=model, model_name=model_name)
     plot_roc_auc_curve(X_test, y_test, pipeline, model_name=model_name)
+
+    grid_search = GridSearchCV(pipeline, hp_list, cv=5, scoring='accuracy')
+    grid_search.fit(X_train, y_train)
+
+    print(f"Best parameters for {model_identifier}: {grid_search.best_params_}")
+    print(f"Best score for {model_identifier}: {grid_search.best_score_}")
+
 
 if __name__ == "__main__":
     pred_models = [
@@ -371,6 +387,13 @@ if __name__ == "__main__":
                          "4. min_samples_leaf - minimum number of samples required to be at a leaf node"]
         },
         {
+            "name": "GaussianNB",
+            "test_size": [{"default": 20}, {"others": [15, 25]}],
+            "hp_list": {
+                "var_smoothing": "1e-09"
+            }
+        },
+        {
             "name": "GradientBoostingClassifier",
             "test_size": [{"default": [15]}, {"others": [20, 25]}],
             "hp_list": {
@@ -405,11 +428,9 @@ if __name__ == "__main__":
                 "n_neighbors": [5, 10, 15, 20],
                 "weights": ["uniform", "distance"],
                 "algorithm": ["auto", "ball_tree", "kd_tree", "brute"],
-                "leaf_size": [0, 20, 40, 60, 80, 100],
-                "p": [1, 2, 3, 4, 5],
-                "metric": ["minkowski", "manhattan", "euclidean", "chebyshev"],
-                "metric_params": "None",
-                "n_jobs": "None"
+                "leaf_size": [0, 20, 40, 60],
+                "p": [1, 2, 3, 4],
+                "metric": ["minkowski", "manhattan", "euclidean", "chebyshev"]
             },
             "model_identifier": "K Neighbors Classifier " + "15",
             "Comments": ["1. n_neighbors - number of neighbors to tune",
@@ -469,6 +490,7 @@ if __name__ == "__main__":
         }
     ]
 
+    # Load the data and check for class imbalance
     filename = "data/Group21_Financial_Transactions_Dataset.csv"
     df = load_data(filename=filename)
     check_class_imbalance(df)
@@ -476,9 +498,9 @@ if __name__ == "__main__":
 
     # Handle imbalanced class and check that imbalance
     # is resolved and correlation matrix is updated
-    df = handle_class_imbalance(df)
-    check_class_imbalance(df)
-    correlatioin_analysis(df)
+    # df = handle_class_imbalance(df)
+    # check_class_imbalance(df)
+    # correlatioin_analysis(df)
 
 
     # Drop "Merchant Location History" since it is code only, which cannot
@@ -487,8 +509,8 @@ if __name__ == "__main__":
 
     # Select features to process and the target variable
     col_types = get_column_types(df)
-    # sorted_features, y, X = get_ig_for_features(df)
-    # plot_ig_for_features(sorted_features)
+    sorted_features, y, X = get_ig_for_features(df)
+    plot_ig_for_features(sorted_features)
 
     # Run the models to evaluate for various test sizes and hyperparameters
     for model_info in pred_models:
@@ -498,6 +520,7 @@ if __name__ == "__main__":
         model = create_model(model_info["name"])
 
         print("Running model: ", model_identifier, "...")
+        hp_list = model["hp_list"]
         run(df, model, col_types, model_name=model_identifier, test_size=test_size)
         print("Completed run for model: ", model_identifier)
 
