@@ -161,11 +161,14 @@ class Player:
         self.score = 0
         self.strategy = None
 
-    def choose_strategy(self) -> bool:
-        choice = int(input(f"{self.name}, select (1) to become maximizer or (2) to be minimizer?"))
-
-        if choice is not 1:
-            print("Invalid choice. Defaulting to maximizer.")
+    def choose_strategy(self, c: int = None) -> bool:
+        if c is None:
+            choice = int(input(f"{self.name}, select (1) to become maximizer or (2) to be minimizer? "))
+        else:
+            choice = c
+    
+        if choice not in [1, 2]:
+            print(f"Invalid choice. Defaulting {self.name} to maximizer.")
             choice = 1
         
         self.strategy = MinimaxStrategy(True) if choice == 1 else MinimaxStrategy(False)
@@ -195,6 +198,9 @@ class CatchUpGame:
         print(f"Randomly chose {self.current_player.name} as starting player")
         
         self.current_player.choose_strategy()
+        
+        other_player = self.player2 if self.current_player == self.player1 else self.player1
+        other_player.choose_strategy()
 
     def is_game_over(self):
         return (not self.game_state.available_numbers) or \
@@ -211,7 +217,7 @@ class CatchUpGame:
 
     def play(self):
         print(f"Starting game Catch-up Numbers: {self.player1.name} vs. {self.player2.name}")
-        self.current_player.choose_strategy()
+        # self.current_player.choose_strategy()
 
         while not self.is_game_over():
             print(f"Available numbers: {sorted(list(self.game_state.available_numbers))}")
