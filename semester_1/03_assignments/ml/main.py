@@ -335,39 +335,36 @@ def create_model(model_name: str) -> object:
     return model
 
 @track_time_and_space
-def run(df, model, col_types: dict, model_name: str, test_size: float = 0.2):
+def run(df, model, col_types: dict, model_name: str, test_size: float = 0.2, hp_list: dict = None):
     X_test, y_test, X_train, y_train, pipeline = split_data_fit_model(df, col_types, model=model, test_size=test_size)
     cm, ypred = predict(X_test, y_test, pipeline)
     
+    if hp_list is not None:
+        grid_search = GridSearchCV(estimator=model, param_grid=hp_list, cv=5, scoring='accuracy')
+        grid_search.fit(X_train, y_train)
+
+        print(f"Best parameters for {model_identifier}: {grid_search.best_params_}")
+        print(f"Best score for {model_identifier}: {grid_search.best_score_}")
+
     print_model_performance(cm, y_test, ypred, model_name=model_name)
     plot_confusion_matrix(cm, model=model, model_name=model_name)
     plot_roc_auc_curve(X_test, y_test, pipeline, model_name=model_name)
-
-    grid_search = GridSearchCV(pipeline, hp_list, cv=5, scoring='accuracy')
-    grid_search.fit(X_train, y_train)
-
-    print(f"Best parameters for {model_identifier}: {grid_search.best_params_}")
-    print(f"Best score for {model_identifier}: {grid_search.best_score_}")
-
 
 if __name__ == "__main__":
     pred_models = [
         {
             "name": "AdaBoostClassifier",
-            "test_size": [{"default": [15]}, {"others": [20, 25]}],
+            "test_size": [{"default": [20]}, {"others": [15, 25, 30]}],
             "hp_list": {
-                "n_estimators": 50, 
-                "learning_rate": 1.0, 
-                "algorithm": 'SAMME.R', 
-                "random_state": "None"
-            },
-            "model_identifier": "AdaBoost Classifier " + "15",
-            "Comments": ["1. n_estimators - number of weak learners to train iteratively",
-                         "2. learning_rate - contribution of each weak learner"]
+                "n_estimators": [0, 25, 50, 75, 100],
+                "learning_rate": [0.1, 0.35, 0.55, 0.85, 1.00],
+                "algorithm": ['SAMME'], 
+                "random_state": [71]
+            }
         },
         {
             "name": "DecisionTreeClassifier",
-            "test_size": [{"default": [15]}, {"others": [20, 25]}],
+            "test_size": [{"default": [20]}, {"others": [15, 25, 30]}],
             "hp_list": {
                 "criterion": 'gini', 
                 "max_depth": "None", 
@@ -379,23 +376,18 @@ if __name__ == "__main__":
                 "min_impurity_decrease": 0.0, 
                 "min_impurity_split": "None", "class_weight": "None", 
                 "ccp_alpha": 0.0
-            },
-            "model_identifier": "Decision Tree Classifier " + "15",
-            "Comments": ["1. criterion - gini or entropy",
-                         "2. max_depth - maximum depth of the tree",
-                         "3. min_samples_split - minimum number of samples required to split an internal node",
-                         "4. min_samples_leaf - minimum number of samples required to be at a leaf node"]
+            }
         },
         {
             "name": "GaussianNB",
-            "test_size": [{"default": 20}, {"others": [15, 25]}],
+            "test_size": [{"default": [20]}, {"others": [15, 25, 30]}],
             "hp_list": {
                 "var_smoothing": "1e-09"
             }
         },
         {
             "name": "GradientBoostingClassifier",
-            "test_size": [{"default": [15]}, {"others": [20, 25]}],
+            "test_size": [{"default": [20]}, {"others": [15, 25, 30]}],
             "hp_list": {
                 "n_estimators": [100, 200, 300, 400, 500],
                 "learning_rate": [0.1, 0.35, 0.55, 0.85, 1.00],
@@ -413,17 +405,11 @@ if __name__ == "__main__":
                 "n_iter_no_change": "None",
                 "tol": [0.0001],
                 "presort": ["deprecated", "auto"]
-            },
-            "model_identifier": "Gradient Boosting Classifier " + "15",
-            "Comments": ["1. n_estimators - number of boosting stages to be run",
-                         "2. learning_rate - contribution of each tree",
-                         "3. max_depth - maximum depth of the individual regression estimators",
-                         "4. min_samples_split - minimum number of samples required to split an internal node",
-                         "5. min_samples_leaf - minimum number of samples required to be at a leaf node"]
+            }
         },
         {
             "name": "KNeighborsClassifier",
-            "test_size": [{"default": [15]}, {"others": [20, 25]}],
+            "test_size": [{"default": [20]}, {"others": [15, 25, 30]}],
             "hp_list": {
                 "n_neighbors": [5, 10, 15, 20],
                 "weights": ["uniform", "distance"],
@@ -431,15 +417,11 @@ if __name__ == "__main__":
                 "leaf_size": [0, 20, 40, 60],
                 "p": [1, 2, 3, 4],
                 "metric": ["minkowski", "manhattan", "euclidean", "chebyshev"]
-            },
-            "model_identifier": "K Neighbors Classifier " + "15",
-            "Comments": ["1. n_neighbors - number of neighbors to tune",
-                         "2. p is Minkowski (the power parameter) - 1 => manhattan_distance, 2 => Euclidean_distance",
-                         "3. weights - uniform or distance"]
+            }
         },
         {
             "name": "LogisticRegression",
-            "test_size": [{"default": [15]}, {"others": [20, 25]}],
+            "test_size": [{"default": [20]}, {"others": [15, 25, 30]}],
             "hp_list": {
                 "penalty": ["l2", "l1", "elasticnet", "none"],
                 "dual": ["False", "True"],
@@ -456,15 +438,11 @@ if __name__ == "__main__":
                 "warm_start": ["False", "True"],
                 "n_jobs": ["None", 1],
                 "l1_ratio": ["None", "0.5"]
-            },
-            "model_identifier": "Logistic Regression " + "15",
-            "Comments": ["1. C - inverse of regularization strength",
-                         "2. solver - algorithm to use in optimization problem",
-                         "3. max_iter - maximum number of iterations taken for the solvers to converge"]
+            }
         },
         {
            "name": "RandomForestClassifier",
-           "test_size": [{"default": [15]}, {"others": [20, 25]}],
+           "test_size": [{"default": [20]}, {"others": [15, 25, 30]}],
            "hp_list": {
                 "n_estimators": [100],
                 "criterion": ["gini"],
@@ -481,12 +459,7 @@ if __name__ == "__main__":
                 "class_weight": "None",
                 "ccp_alpha": [0.0],
                 "max_samples": "None"
-            },
-           "Comments": ["1. n_estimators - number of trees in the forest",
-                        "2. criterion - gini or entropy",
-                        "3. max_depth - maximum depth of the tree",
-                        "4. min_samples_split - minimum number of samples required to split an internal node",
-                        "5. min_samples_leaf - minimum number of samples required to be at a leaf node"]
+            }
         }
     ]
 
@@ -498,9 +471,9 @@ if __name__ == "__main__":
 
     # Handle imbalanced class and check that imbalance
     # is resolved and correlation matrix is updated
-    # df = handle_class_imbalance(df)
-    # check_class_imbalance(df)
-    # correlatioin_analysis(df)
+    df = handle_class_imbalance(df)
+    check_class_imbalance(df)
+    correlatioin_analysis(df)
 
 
     # Drop "Merchant Location History" since it is code only, which cannot
@@ -509,8 +482,8 @@ if __name__ == "__main__":
 
     # Select features to process and the target variable
     col_types = get_column_types(df)
-    sorted_features, y, X = get_ig_for_features(df)
-    plot_ig_for_features(sorted_features)
+    # sorted_features, y, X = get_ig_for_features(df)
+    # plot_ig_for_features(sorted_features)
 
     # Run the models to evaluate for various test sizes and hyperparameters
     for model_info in pred_models:
@@ -520,8 +493,7 @@ if __name__ == "__main__":
         model = create_model(model_info["name"])
 
         print("Running model: ", model_identifier, "...")
-        hp_list = model["hp_list"]
-        run(df, model, col_types, model_name=model_identifier, test_size=test_size)
+        run(df, model, col_types, model_name=model_identifier, test_size=test_size, hp_list=None)
         print("Completed run for model: ", model_identifier)
 
         # Now run the model for other test sizes
@@ -529,5 +501,8 @@ if __name__ == "__main__":
             test_size = float(os) / 100
             model_identifier = model_info["name"] + " " + str(os)
 
-            # Model was already created, so no need to create one more    
-            run(df, model, col_types, model_name=model_identifier, test_size=test_size)
+            model = create_model(model_info["name"])
+            print("Running model: ", model_identifier, "...")
+            run(df, model, col_types, model_name=model_identifier, test_size=test_size, hp_list=model_info["hp_list"])
+            print("Completed run for model: ", model_identifier)
+
