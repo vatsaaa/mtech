@@ -1,6 +1,12 @@
 import math
 import random
 
+def generate_numbers(n):
+    """
+    Generate a list of numbers from 1 to n.
+    """
+    return list(range(1, n + 1))
+
 def generate_subsets(numbers, target):
     """
     Generate all subsets of numbers that sum up to at least target.
@@ -85,10 +91,11 @@ def find_best_move(numbers, current_sum, opponent_sum):
             best_move = move
     return best_move
 
-def play_catch_up(numbers):
+def play_catch_up(n):
     """
     Play the Catch-Up game between two computer players.
     """
+    numbers = generate_numbers(n)
     current_sum = 0
     opponent_sum = 0
     while numbers:
@@ -134,7 +141,14 @@ def play_catch_up(numbers):
     print("Final scores - P1:", current_sum, "P2:", opponent_sum)
 
 # Example usage
-numbers = [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15]
-random.shuffle(numbers)  # Shuffle the numbers for randomness
-play_catch_up(numbers)
+# numbers = [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15]
+# numbers = generate_numbers(n)
+n = int(input("Enter the value of n: "))
+# Determine if Player 1 is a maximizer based on user input
+player1_maximizer = bool(int(input("Is Player 1 a maximizer? (Enter 1 for Yes, 0 for No): ")))
+
+# Player 2 automatically becomes the minimizer
+player2_maximizer = not player1_maximizer
+# random.shuffle(numbers)  # Shuffle the numbers for randomness
+play_catch_up(n)
 
