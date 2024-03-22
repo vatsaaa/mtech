@@ -1,63 +1,62 @@
-predict_water_source(LakeDistance, RiverDistance, Rainfall, Aquifer, BeachDistance, WaterSource) :-
+predict_water_source(Distance_from_Lake, Distance_from_River, Rainfall_intensity, Sandy_aquifer, Distance_from_Beach, WaterSource) :-
 (
-    LakeDistance < 10,
+    Distance_from_Lake < 10,
     WaterSource = lake
 );
 (
-    LakeDistance >= 10,
-    RiverDistance < 8,
-    Rainfall < 200,
+    Distance_from_Lake >= 10,
+    Distance_from_River < 8,
+    Rainfall_intensity < 200,
     WaterSource = river
 );
 (
-    LakeDistance >= 10,
-    RiverDistance < 8,
-    Rainfall >= 200,
+    Distance_from_Lake >= 10,
+    Distance_from_River < 8,
+    Rainfall_intensity >= 200,
     WaterSource = rain
 );
 (
-    LakeDistance >= 10,
-    RiverDistance >= 8,
-    Rainfall >= 150,
+    Distance_from_Lake >= 10,
+    Distance_from_River >= 8,
+    Rainfall_intensity >= 150,
     WaterSource = rain
 );
 (
-	LakeDistance > 10,
-	LakeDistance < 14,
-	RiverDistance >= 8,
-	Rainfall < 150,
-	Aquifer == not_sandy,
+	Distance_from_Lake < 14,
+	Distance_from_River >= 8,
+	Rainfall_intensity < 150,
+	Sandy_aquifer == no,
 	WaterSource = lake
 );
 (
-	LakeDistance >= 14,
-	RiverDistance >= 8,
-	Rainfall < 150,
-	Aquifer == not_sandy,
+	Distance_from_Lake >= 14,
+	Distance_from_River >= 8,
+	Rainfall_intensity < 150,
+	Sandy_aquifer == no,
 	WaterSource = rain
 );
 (
-	LakeDistance >= 10,
-	RiverDistance >= 8,
-	Rainfall < 150,
-	Aquifer == sandy,
+	Distance_from_Lake >= 10,
+	Distance_from_River >= 8,
+	Rainfall_intensity < 150,
+	Sandy_aquifer == yes,
+    Distance_from_Beach >= 5,
 	WaterSource = groundwater
 );
 (
-    LakeDistance >= 14,
-    RiverDistance >= 20,
-    Rainfall < 150,
-    Aquifer == sandy,
-    BeachDistance < 5,
+    Distance_from_Lake >= 10,
+    Distance_from_River >= 20,
+    Rainfall_intensity < 150,
+    Sandy_aquifer == yes,
+    Distance_from_Beach < 5,
     WaterSource = rain
 );
 (
-    LakeDistance >= 14,
-    RiverDistance >= 8,
-    Rainfall < 20,
-    Rainfall < 150,
-    Aquifer == sandy,
-    BeachDistance < 5,
+    Distance_from_Lake >= 10,
+    Distance_from_River < 20,
+    Rainfall_intensity < 150,
+    Sandy_aquifer == yes,
+    Distance_from_Beach < 5,
     WaterSource = river
 );
 % default to groundwater
@@ -65,17 +64,16 @@ WaterSource = groundwater.
 
 get_user_input :-
     write('Distance from Lake (km): '),
-    read(LakeDistance),
+    read(Distance_from_Lake),
     write('Distance from River (km): '),
-    read(RiverDistance),
-    write('Enter Rainfall (mm/month): '),
-    read(Rainfall),
-    write('Is the Aquifer Sandy? (yes/no): '),
-    read(Answer),
-    (Answer == yes -> Aquifer = sandy; Aquifer = not_sandy),
+    read(Distance_from_River),
+    write('Enter Rainfall_intensity (mm/month): '),
+    read(Rainfall_intensity),
+    write('Is the Sandy_aquifer Sandy? (yes/no): '),
+    read(Sandy_aquifer),
     write('Distance from Beach (km): '),
-    read(BeachDistance),
-    predict_water_source(LakeDistance, RiverDistance, Rainfall, Aquifer, BeachDistance, WaterSource),
+    read(Distance_from_Beach),
+    predict_water_source(Distance_from_Lake, Distance_from_River, Rainfall_intensity, Sandy_aquifer, Distance_from_Beach, WaterSource),
     write('Recommended Water Source: '),
     write(WaterSource).
 
