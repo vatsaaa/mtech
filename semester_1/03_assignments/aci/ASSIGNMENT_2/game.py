@@ -174,6 +174,12 @@ class Player:
         self.strategy = MinimaxStrategy(True) if choice == 1 else MinimaxStrategy(False)
 
         return not choice
+    
+    def get_strategy_name(self) -> str:
+        if self.strategy:
+            return "Maximizer" if isinstance(self.strategy, MinimaxStrategy) and self.strategy.maximizing_player else "Minimizer"
+        else:
+            return "No strategy chosen"
 
     def make_move(self, game_state: GameState):
         try:
@@ -195,6 +201,8 @@ class CatchUpGame:
         self.current_player = random.choice([player1, player2])
         print(f"Randomly chose {self.current_player.name} as starting player")
         
+        
+        # Choose strategy for the current player
         self.current_player.choose_strategy()
         
         self.other_player = player2 if self.current_player == player1 else player1
@@ -213,13 +221,21 @@ class CatchUpGame:
             return self.other_player
         else:
             return None
+    
+    def change_PlayerTurn(self):
+        if(self.current_player.name == "Player 1"):
+            self.current_player.name = "Player 2"
+            self.name = "Player 2"
+        else:
+            self.current_player.name = "Player 1"
+            self.name = "Player 1"
 
     def play(self):
         print(f"Starting game Catch-up Numbers: {self.current_player.name} vs. {self.other_player.name}")
 
         while not self.is_game_over():
             print(f"Available numbers: {sorted(list(self.game_state.available_numbers))}")
-
+            self.change_PlayerTurn()
             # Player 1's turn
             p1_choice = self.current_player.make_move(self.game_state.copy())
             if p1_choice is not None:
@@ -251,8 +267,12 @@ class CatchUpGame:
 def main():
     player1 = Player("Player 1")
     player2 = Player("Player 2")
-
-    n = int(input("Enter the number of numbers (n): "))
+    isValidRange = True
+    while(isValidRange):
+        n = int(input("Enter the range of numbers (n) greater than 1: "))
+        if(n>1):
+            isValidRange = False
+    
     catch_up_game = CatchUpGame(n, player1, player2)
     catch_up_game.play()
 
