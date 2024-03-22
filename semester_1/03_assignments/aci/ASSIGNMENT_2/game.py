@@ -6,14 +6,14 @@ class GameState:
     def __init__(self, n):
         self.n = n
         self.available_numbers = set(range(1, n + 1))
-        self.player1_score = 0
-        self.player2_score = 0
+        self.current_player_score = 0
+        self.other_player_score = 0
 
     def copy(self):
         copy_state = GameState(self.n)  # Create an empty GameState object
         copy_state.available_numbers = self.available_numbers.copy()  # Assign copied available numbers
-        copy_state.player1_score = self.player1_score
-        copy_state.player2_score = self.player2_score
+        copy_state.current_player_score = self.current_player_score
+        copy_state.other_player_score = self.other_player_score
         return copy_state
 
 """
@@ -31,8 +31,8 @@ class GameStrategy(ABC):
 
     def get_candidate_numbers(self, game_state: GameState):
         available_numbers = game_state.available_numbers
-        player_score = game_state.player1_score  # Adjust for player 2 if needed
-        opponent_score = game_state.player2_score  # Adjust for player 1 if needed
+        player_score = game_state.current_player_score  # Adjust for player 2 if needed
+        opponent_score = game_state.other_player_score  # Adjust for player 1 if needed
 
         if player_score == opponent_score:
             # If scores are equal, choose all available numbers
@@ -78,7 +78,7 @@ class MinimaxStrategy(GameStrategy):
             for number in current_state.available_numbers:
                 new_state = current_state.copy()
                 new_state.available_numbers.remove(number)
-                new_state_score = new_state.player1_score + number
+                new_state_score = new_state.current_player_score + number
 
                 # Check if the game is over for the opponent
                 if not new_state.available_numbers:
@@ -86,7 +86,7 @@ class MinimaxStrategy(GameStrategy):
                 else:
                     # Simulate opponent's move
                     opponent_score = self._simulate_opponent_move(new_state.available_numbers)
-                    new_state.player2_score = opponent_score
+                    new_state.other_player_score = opponent_score
 
                     # Recursively evaluate the next move
                     next_move_score = self._minimax(new_state, alpha, beta, maximizing=not self.maximizing_player)
@@ -129,17 +129,17 @@ class MinimaxStrategy(GameStrategy):
     """
     def _minimax(self, game_state, alpha, beta, maximizing=True):
         if not game_state.available_numbers:
-            return game_state.player1_score if maximizing else 0
+            return game_state.current_player_score if maximizing else 0
 
         best_score = float("-inf") if maximizing else float("inf")
         for number in game_state.available_numbers:
             new_state = game_state.copy()
             new_state.available_numbers.remove(number)
-            new_state_score = new_state.player1_score + number
+            new_state_score = new_state.current_player_score + number
 
             # Simulate opponent's move
             opponent_score = self._simulate_opponent_move(new_state.available_numbers)
-            new_state.player2_score = opponent_score
+            new_state.other_player_score = opponent_score
 
             score = new_state_score - opponent_score + self._minimax(new_state, alpha, beta, maximizing=not maximizing)
             best_score = max(best_score, score) if maximizing else min(best_score, score)
@@ -161,11 +161,14 @@ class Player:
         self.score = 0
         self.strategy = None
 
-    def choose_strategy(self) -> bool:
-        choice = int(input(f"{self.name}, select (1) to become maximizer or (2) to be minimizer?"))
-
-        if choice is not 1:
-            print("Invalid choice. Defaulting to maximizer.")
+    def choose_strategy(self, c: int = None) -> bool:
+        if c is None:
+            choice = int(input(f"{self.name}, select (1) to become maximizer or (2) to be minimizer? "))
+        else:
+            choice = c
+    
+        if choice not in [1, 2]:
+            print(f"Invalid choice. Defaulting {self.name} to maximizer.")
             choice = 1
         
         self.strategy = MinimaxStrategy(True) if choice == 1 else MinimaxStrategy(False)
@@ -186,57 +189,58 @@ class Player:
 
 class CatchUpGame:
     def __init__(self, n: int, player1: Player, player2: Player):
-        self.player1 = player1
-        self.player2 = player2
         self.game_state = GameState(n)
       
         # Randomly choose the starting player and set their preferred strategy
-        self.current_player = random.choice([self.player1, self.player2])
+        self.current_player = random.choice([player1, player2])
         print(f"Randomly chose {self.current_player.name} as starting player")
         
         self.current_player.choose_strategy()
+        
+        self.other_player = player2 if self.current_player == player1 else player1
+        c = 2 if self.current_player.strategy == 1 else 1
+        self.other_player.choose_strategy(c=c)
 
     def is_game_over(self):
         return (not self.game_state.available_numbers) or \
-           (self.player1.strategy.move(self.game_state.copy()) is None and 
-            self.player2.strategy.move(self.game_state.copy()) is None)
+           (self.current_player.strategy.move(self.game_state.copy()) is None and 
+            self.other_player.strategy.move(self.game_state.copy()) is None)
 
     def get_winner(self):
-        if self.player1.score > self.player2.score:
-            return self.player1
-        elif self.player2.score > self.player1.score:
-            return self.player2
+        if self.current_player.score > self.other_player.score:
+            return self.current_player
+        elif self.other_player.score > self.current_player.score:
+            return self.other_player
         else:
             return None
 
     def play(self):
-        print(f"Starting game Catch-up Numbers: {self.player1.name} vs. {self.player2.name}")
-        self.current_player.choose_strategy()
+        print(f"Starting game Catch-up Numbers: {self.current_player.name} vs. {self.other_player.name}")
 
         while not self.is_game_over():
             print(f"Available numbers: {sorted(list(self.game_state.available_numbers))}")
 
             # Player 1's turn
-            p1_choice = self.player1.make_move(self.game_state.copy())  # Pass a copy of game state
+            p1_choice = self.current_player.make_move(self.game_state.copy())
             if p1_choice is not None:
                 self.game_state.available_numbers.remove(p1_choice)
-                self.player1.score += p1_choice
-                print(f"{self.player1.name} chooses: {p1_choice}")
+                self.current_player.score += p1_choice
+                print(f"{self.current_player.name} chooses: {p1_choice}")
             else:
-                print(f"{self.player1.name} cannot make a move.")
+                print(f"{self.current_player.name} cannot make a move.")
                 break
 
             # Player 2's turn
-            p2_choice = self.player2.make_move(self.game_state.copy())  # Pass a copy of game state
+            p2_choice = self.other_player.make_move(self.game_state.copy())
             if p2_choice is not None:
                 self.game_state.available_numbers.remove(p2_choice)
-                self.player2.score += p2_choice
-                print(f"{self.player2.name} chooses: {p2_choice}")
+                self.other_player.score += p2_choice
+                print(f"{self.other_player.name} chooses: {p2_choice}")
             else:
-                print(f"{self.player2.name} cannot make a move.")
+                print(f"{self.other_player.name} cannot make a move.")
                 break
 
-            print(f"{self.player1.name} score: {self.player1.score}, {self.player2.name} score: {self.player2.score}\n")
+            print(f"{self.current_player.name} score: {self.current_player.score}, {self.other_player.name} score: {self.other_player.score}\n")
 
         winner = self.get_winner()
         if winner:
@@ -254,3 +258,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
