@@ -143,7 +143,14 @@ def play_catch_up(n):
 # Example usage
 # numbers = [1, 2, 3, 4, 5,6,7,8,9,10,11,12,13,14,15]
 # numbers = generate_numbers(n)
-n = int(input("Enter the value of n: "))
+# n = int(input("Enter the value of n: "))
+while True:
+    n = int(input("Enter the value of n (greater than 0 and less than 150): "))
+    if 0 < n < 150:
+        break
+    else:
+        print("Invalid input. Please enter a value greater than 0 and less than 150.")
+
 # Determine if Player 1 is a maximizer based on user input
 player1_maximizer = bool(int(input("Is Player 1 a maximizer? (Enter 1 for Yes, 0 for No): ")))
 
