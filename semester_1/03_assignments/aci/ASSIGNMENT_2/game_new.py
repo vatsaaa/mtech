@@ -1,5 +1,6 @@
 import math
 import random
+from typing import List
 
 def generate_numbers(n):
     """
@@ -11,12 +12,26 @@ def generate_subsets(numbers, target):
     """
     Generate all subsets of numbers that sum up to at least target.
     """
-    subsets = []
-    for i in range(len(numbers)):
-        for j in range(i + 1, len(numbers) + 1):
-            subset = numbers[i:j]
-            if sum(subset) >= target:
-                subsets.append(subset)
+    # subsets = []
+    # for i in range(len(numbers)):
+    #     for j in range(i + 1, len(numbers) + 1):
+    #         subset = numbers[i:j]
+    #         if sum(subset) >= target:
+    #             subsets.append(subset)
+    # return subsets
+    def backtrack(start: int, path: List[int], current_sum: int) -> None:
+        if current_sum >= target:
+            subsets.append(path[:])  # Append a copy of the path
+        for i in range(start, len(numbers)):
+            path.append(numbers[i])
+            # Recursively call backtrack with updated parameters
+            backtrack(i + 1, path, current_sum + numbers[i])
+            path.pop()  # Backtrack
+
+    subsets: List[List[int]] = []
+    # Convert all non-empty string elements in numbers to integers
+    numbers = [int(x) for x in numbers]
+    backtrack(0, [], 0)
     return subsets
 
 def get_available_moves(numbers, current_sum):
@@ -112,7 +127,7 @@ def play_catch_up(n):
         current_sum += p1_move
         numbers.remove(p1_move)
         print("P1 chooses:", p1_move)
-        print("Subsets for P1:", generate_subsets(numbers, current_sum))
+        print("Subsets for P2:", generate_subsets(numbers, current_sum))
         if not numbers:
             break
 
@@ -126,7 +141,7 @@ def play_catch_up(n):
         opponent_sum += p2_move
         numbers.remove(p2_move)
         print("P2 chooses:", p2_move)
-        print("Subsets for P2:", generate_subsets(numbers, opponent_sum))
+        print("Subsets for P1:", generate_subsets(numbers, opponent_sum))
         if not numbers:
             break
 
