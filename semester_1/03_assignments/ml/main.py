@@ -32,46 +32,31 @@ if platform.system() == "Windows":
 elif platform.system() == "Darwin" or platform.system() == "Linux":
     import resource
 
-if platform.system() == "Windows":
-    def track_time_and_space(func):
-        def wrapper(*args, **kwargs):
-            start_time = time.time()
+def track_time_and_space(func):
+    def wrapper(*args, **kwargs):
+        start_time = time.time()
+        if platform.system() == "Windows":
             start_memory = psutil.Process().memory_info().rss
-
-            result = func(*args, **kwargs)
-
-            end_time = time.time()
             end_memory = psutil.Process().memory_info().rss
-
-            print(platform.system(), start_memory, end_memory)
-
-            execution_time = end_time - start_time
-            memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
-
-            print(f"Execution time: {execution_time} seconds | Memory usage: {memory_usage} KB")
-
-            return result, execution_time, memory_usage
-
-        return wrapper
-else:
-    def track_time_and_space(func):
-        def wrapper(*args, **kwargs):
-            start_time = time.time()
+        else:
             start_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
-
-            result = func(*args, **kwargs)
-
-            end_time = time.time()
             end_memory = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
-            execution_time = end_time - start_time
-            memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
+        result = func(*args, **kwargs)
 
-            print(f"Execution time: {execution_time} seconds | Memory usage: {memory_usage} KB")
+        end_time = time.time()
+        end_memory = psutil.Process().memory_info().rss
 
-            return result, execution_time, memory_usage
+        print(platform.system(), start_memory, end_memory)
 
-        return wrapper
+        execution_time = end_time - start_time
+        memory_usage = (end_memory - start_memory) / 1024  # Convert to kilobytes
+
+        print(f"Execution time: {execution_time} seconds | Memory usage: {memory_usage} KB")
+
+        return result, execution_time, memory_usage
+
+    return wrapper
 
 def load_data(filename: str) -> pd.DataFrame:
     df = pd.read_csv(filename, index_col = 0, encoding='utf-8')
@@ -123,7 +108,7 @@ def check_class_imbalance(df: pd.DataFrame, display_percent=True, display_count=
 
     return df
 
-def handle_class_imbalance(df: pd.DataFrame) -> pd.DataFrame:
+def handle_class_imbalance(df: pd.DataFrame):
     # Separate features (X) from target variable (y)
     X = df.drop("Is Fraudulent", axis=1)
     y = df["Is Fraudulent"]
@@ -133,12 +118,6 @@ def handle_class_imbalance(df: pd.DataFrame) -> pd.DataFrame:
     # Apply SMOTE
     smote = SMOTE(random_state=71)
     X, y = smote.fit_resample(X, y)
-
-    # Display the new class distribution
-    print("New Class Distribution:")
-    print(y.value_counts())
-
-    plot_class_distribution(y=y)
 
     # Convert the target variable back to numeric
     y = y.map({'No': 0, 'Yes': 1})
@@ -165,7 +144,6 @@ def feature_engineering(df: pd.DataFrame):
 
     return df
 
-# @title Indentifying Feature Types
 def get_column_types(dframe: pd.DataFrame):
   all_features = dframe.columns
   op_features = ["Is Fraudulent"]
@@ -188,11 +166,7 @@ def get_ig_for_features(df: pd.DataFrame):
 
     sorted_features = []
 
-    # Encode categorical features
-    categorical_features = X.select_dtypes(include=['object']).columns
-    for feature in categorical_features:
-        encoder = LabelEncoder()
-        X[feature] = encoder.fit_transform(X[feature])
+    X = encode_categorical_features(X)
 
     # Apply Information Gain
     ig = mutual_info_regression(X, y) * 100
@@ -221,6 +195,7 @@ def plot_ig_for_features(sorted_features):
   # Add importance scores as labels on the horizontal bar chart
   for i, v in enumerate([score for feature, score in sorted_features]):
       ax.text(v + 0.01, i, str(round(v, 3)), color="black", fontweight="bold")
+
   plt.show()
 
 def split_data_fit_model(df, col_types: dict, model, test_size: float = 0.2):
@@ -482,8 +457,8 @@ if __name__ == "__main__":
 
     # Select features to process and the target variable
     col_types = get_column_types(df)
-    # sorted_features, y, X = get_ig_for_features(df)
-    # plot_ig_for_features(sorted_features)
+    sorted_features, y, X = get_ig_for_features(df)
+    plot_ig_for_features(sorted_features)
 
     # Run the models to evaluate for various test sizes and hyperparameters
     for model_info in pred_models:

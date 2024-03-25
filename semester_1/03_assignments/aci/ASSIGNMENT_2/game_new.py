@@ -12,13 +12,6 @@ def generate_subsets(numbers, target):
     """
     Generate all subsets of numbers that sum up to at least target.
     """
-    # subsets = []
-    # for i in range(len(numbers)):
-    #     for j in range(i + 1, len(numbers) + 1):
-    #         subset = numbers[i:j]
-    #         if sum(subset) >= target:
-    #             subsets.append(subset)
-    # return subsets
     def backtrack(start: int, path: List[int], current_sum: int) -> None:
         if current_sum >= target:
             subsets.append(path[:])  # Append a copy of the path
@@ -173,4 +166,3 @@ player1_maximizer = bool(int(input("Is Player 1 a maximizer? (Enter 1 for Yes, 0
 player2_maximizer = not player1_maximizer
 # random.shuffle(numbers)  # Shuffle the numbers for randomness
 play_catch_up(n)
-
