@@ -179,7 +179,7 @@
     - Stacking begins by training multiple diverse base models on the training data. 
     - Common base learners: Decision Trees, Support Vector Machines, Random Forest, Gradient Boosting, Neural Networks, K-Nearest Neighbors, Logistic Regression, Naive Bayes, etc.
     - Holdout data: A portion of the training data is set aside as holdout data to train the meta-model.
-    ![Stacking Image 1](Stacking001.jpeg)
+    ![Stacking Image 1](https://github.com/vatsaaa/mtech/blob/main/semester_1/additional/Stacking001.jpg)
 ### Numerical Example
 ### Advantages
 ### Disadvantages
