@@ -263,10 +263,10 @@ X1    | X2  |   Y
 
 ### Numerical Example
 
-- Query point: x = (3, 24)
-- Choose K = 5
+- Query point:* x = (3, 24)
+- Choose K* = 5
 - Distance Metric: Euclidean Distance
-- Dataset:
+#### Dataset:
 X1    | X2  |   Y   |   Distance²   | Rank
 ----:|----:|---:| ---:  | ---: |
 1  | 12  | 0 | (3 - 1)² + (24 - 12)² = 148 | 6
@@ -281,27 +281,27 @@ X1    | X2  |   Y   |   Distance²   | Rank
 
 ### Advantages
 
-    - Simple and easy to implement
-    - Non-parametric and does not make assumptions about underlying data distribution
-    - Handles numerical and categorical data
-    - Captures non-linear relationships between variables
-    - Handles missing values
+- Simple and easy to implement
+- Non-parametric and does not make assumptions about underlying data distribution
+- Handles numerical and categorical data
+- Captures non-linear relationships between variables
+- Handles missing values
 
 ### Disadvantages
 
-    - Computationally expensive: Requires the calculation of distances for each training example
-    - Sensitive to the choice of K
-    - Sensitive to the distance metric
-    - May not work well with high-dimensional data
-    - May not work well with imbalanced data
+- Computationally expensive: Requires the calculation of distances for each training example
+- Sensitive to the choice of K
+- Sensitive to the distance metric
+- May not work well with high-dimensional data
+- May not work well with imbalanced data
 
 ### Applicability
 
-    - Customer segmentation: Retail (segmenting customers based on purchasing behaviour), E-commerce (segmenting customers based on browsing behavior), Healthcare (segmenting patients based on health data for personalized treatment)
-    - Anomaly detection: Cybersecurity (detecting unusual network traffic patterns and intrusions), Manufacturing (detecting defective products on production line)
-    - Image analysis: Image segmentation, object recognition
-    - Document clustering: Text clustering, document classification
-    - Fraud detection: Credit card fraud detection, insurance fraud detection
+- Customer segmentation: Retail (segmenting customers based on purchasing behaviour), E-commerce (segmenting customers based on browsing behavior), Healthcare (segmenting patients based on health data for personalized treatment)
+- Anomaly detection: Cybersecurity (detecting unusual network traffic patterns and intrusions), Manufacturing (detecting defective products on production line)
+- Image analysis: Image segmentation, object recognition
+- Document clustering: Text clustering, document classification
+- Fraud detection: Credit card fraud detection, insurance fraud detection
 
 ### Variations
 
@@ -329,7 +329,7 @@ X1    | X2  |   Y   |   Distance²   | Rank
 - Query point: x = (3, 24)
 - Choose K = 5
 - Distance Metric: Euclidean Distance
-- Dataset:
+#### Dataset:
 X1    | X2  |   Y   |   Distance²   | Rank | Weight
 ----:|----:|---:| ---:  | ---: | ---: |
 1  | 12  | 0 | (3 - 1)² + (24 - 12)² = 148 | 6 | 1/148
@@ -382,7 +382,7 @@ X1    | X2  |   Y   |   Distance²   | Rank | Weight
 
 - Query point: x = (3, 24)
 - Kernel Function: Gaussian Kernel (e^(-0.5 * (x - x0)² / τ²))
-- Dataset:
+#### Dataset
 X1    | X2  |   Y   |   Distance²   | Weight
 ----:|----:|---:| ---:  | ---: |
 1  | 12  | 0 | (3 - 1)² + (24 - 12)² = 148 | 1/148 
@@ -517,8 +517,8 @@ X1    | X2  |   Y   |   Distance²   | Weight
 - C: Regularization parameter that controls the trade-off between maximizing the margin and minimizing the misclassification
 - Large C: Emphasizes minimizing the misclassification
 - Small C: Emphasizes maximizing the margin
-- Slack variables: ξ_i: Measure of how much a data point violates the margin
-- Soft Margin SVM optimization: Minimize 1/2 * ||w||² + C * Σξ_i subject to y_i * (w^T * x_i + b) >= 1 - ξ_i
+- Slack variables: ξ<sub>i</sub>: Measure of how much a data point violates the margin
+- Soft Margin SVM optimization: Minimize 1/2 * ||w||² + C * Σξ<sub>i</sub> subject to y<sub>i</sub> * (w^T * x<sub>i</sub> + b) >= 1 - ξ<sub>i</sub>
 
 ### Non-Linear SVM
 
@@ -615,10 +615,9 @@ Hence, Non-Linear SVM is used to address these issues.
 
 ### Applicability
 
-
-
-
-
+--- 
+---
+---
 
 # Unsupervised Learning
 
