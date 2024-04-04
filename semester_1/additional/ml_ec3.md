@@ -211,7 +211,7 @@
 
 ### Numerical Example
 
-- Dataset:
+#### Dataset:
 X1    | X2  |   Y
 ----:|----:|---: |
 1  | 2  | 0
