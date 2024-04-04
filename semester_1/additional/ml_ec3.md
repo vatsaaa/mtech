@@ -605,7 +605,7 @@ Hence, Non-Linear SVM is used to address these issues.
 - Stacking begins by training multiple diverse base models on the training data. 
 - Common base learners: Decision Trees, Support Vector Machines, Random Forest, Gradient Boosting, Neural Networks, K-Nearest Neighbors, Logistic Regression, Naive Bayes, etc.
 - Holdout data: A portion of the training data is set aside as holdout data to train the meta-model.
-![Stacking Image 1](ml/Stacking001.jpg)
+![Stacking Image 1](./Stacking001.jpg)
 
 ### Numerical Example
 
