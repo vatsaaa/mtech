@@ -404,8 +404,8 @@ Sum|    |   |               |     | 2 | Sum(Weighted Y)
 
 - Query point: x = (3, 24)
 - Kernel Function: Gaussian Kernel = e<sup>(-0.5 * (x - x0)² / τ²)</sup>
+- Dataset
 
-#### Dataset
 X1    | X2  |   Y   |   Distance²   | Weight
 ----:|----:|---:| ---:  | ---: |
 1  | 12  | 0 | (3 - 1)² + (24 - 12)² = 148 | 1/148 
@@ -665,8 +665,9 @@ Hence, Non-Linear SVM is used to address these issues.
 - Dataset: X = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 - Step1: Initialize K = 3 cluster centers, e.g [2, 5, 8]
 - Step2: Assign each data point to the nearest cluster center
+
 X | C1 Distance | C2 Distance | C3 Distance | Assigned Cluster
----: | ---: | ---: | ---: | ---:
+---: | ---: | ---: | ---: | ---: |
 1 | 1 | 4 | 7 | C1
 2 | 0 | 3 | 6 | C1
 3 | 1 | 2 | 5 | C1
@@ -680,8 +681,10 @@ X | C1 Distance | C2 Distance | C3 Distance | Assigned Cluster
 11 | 9 | 6 | 3 | C3
 
 - Step3: Update the cluster centers based on the mean of the data points assigned to the cluster
+
 C1 = [1, 2, 3], C2 = [4, 5, 6], C3 = [7, 8, 9, 10, 11]
-Updating Cluster Centers:
+
+*Updating Cluster Centers:*
 C1 = 1 + 2 + 3 / 3
 C1 = 2
 
@@ -695,6 +698,7 @@ C1 = 2, C2 = 5, C3 = 9
 
 - Step4: Repeat steps 2 and 3 until the cluster centers do not change significantly between iterations
 New centers: [2, 5, 9]
+
 X | C1 Distance | C2 Distance | C3 Distance | Assigned Cluster
 ---: | ---: | ---: | ---: | ---:
 1 | 1 | 4 | 8 | C1
@@ -775,8 +779,9 @@ C3 = 9
 - Dataset: X = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 - Step1: Initialize the first cluster center randomly, e.g. 2
 - Step2: For each data point, calculate the distance to the nearest cluster center
+
 X | Distance to C1 | Probability
----: | ---: | ---:
+---: | ---: | ---: |
 1 | 1 | 1
 2 | 0 | 0
 3 | 1 | 1
@@ -789,8 +794,7 @@ X | Distance to C1 | Probability
 10 | 8 | 0.12
 11 | 9 | 0.11
 
-?????
-
+Step 3: ...
 ## Hierarchical Clustering
 
 ### Algorithm
