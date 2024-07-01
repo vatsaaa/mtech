@@ -2,7 +2,11 @@
 - [How to see z-score table](https://byjus.com/maths/z-score-table/)
 - [Critical Chi-Square Value: How to Find it](https://www.statisticshowto.com/how-to-find-a-critical-chi-square-value/)
 - [Chi Squared Table (Right Tail)](https://www.statisticshowto.com/tables/chi-squared-table-right-tail/)
+<<<<<<< Updated upstream
 - [How to Read the F-Distribution Table](https://www.statology.org/how-to-read-the-f-distribution-table/)
+=======
+[How to Read the F-Distribution Table](https://www.statology.org/how-to-read-the-f-distribution-table/)
+>>>>>>> Stashed changes
 - [Demystifying Machine Learning: A Guided Tour of the Top 10 Algorithms](https://deasadiqbal.medium.com/demystifying-machine-learning-a-guided-tour-of-the-top-10-algorithms-3fee19d6c2a8)
 - [What are Pipelines in Python](https://medium.com/@ayush-thakur02/wait-what-are-pipelines-in-python-628f4b5021fd)
 - [Build Microservices with Python](https://blog.devgenius.io/build-microservices-with-python-63fd35fa3baa)
@@ -36,7 +40,14 @@
 - [Logistic Regression Explained](https://medium.com/@msong507/logistic-regression-explained-2d1b8babe6c1)
 - [Data Preprocessing Steps for Machine Learning in Python (Part 1)](https://medium.com/womenintechnology/data-preprocessing-steps-for-machine-learning-in-phyton-part-1-18009c6f1153)
 - [Bayes’ Theorem: A Powerful Tool for Data Science, Machine Learning, and Data Analysis](https://levelup.gitconnected.com/bayes-theorem-a-powerful-tool-for-data-science-machine-learning-and-data-analysis-4048763585dd)
+<<<<<<< Updated upstream
 - []()
 - []()
 - []()
 - []()
+=======
+[]()
+[]()
+[]()
+[]()
+>>>>>>> Stashed changes
