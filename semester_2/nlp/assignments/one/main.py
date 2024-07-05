@@ -191,6 +191,7 @@ def evaluate_test_set_trigram(trigram_probs, test_set, vocab_size):
         logging.exception(f"Error in evaluate_test_set_trigram: {e}")
         raise
 
+@log_function_entry_exit
 def calculate_perplexity(bigram_probs, test_set, vocab_size):
     try:
         total_prob = 1.0
@@ -220,7 +221,7 @@ except Exception as e:
 
 tokens = preprocess_corpus(corpus)
 
-split_index = int(0.8 * len(tokens))
+split_index = int(0.5 * len(tokens))
 train_tokens = tokens[:split_index]
 test_tokens = tokens[split_index:]
 logging.info(f"Training set size: {len(train_tokens)}")
