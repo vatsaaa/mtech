@@ -9,18 +9,22 @@ import re
 
 nltk.download('punkt')
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+from nltk.tokenize import word_tokenize
+from nltk.util import bigrams, trigrams
+from collections import defaultdict, Counter
+from random import choices
+import numpy as np
+import re
 
 def log_function_entry_exit(func):
     def wrapper(*args, **kwargs):
-        logging.info(f"Entering {func.__name__}")
+        print(f"Entering {func.__name__}")
         try:
             result = func(*args, **kwargs)
-            logging.info(f"Exiting {func.__name__} with result {result}")
+            print(f"Exiting {func.__name__} with result {result}")
             return result
         except Exception as e:
-            logging.exception(f"Exception in {func.__name__}: {e}")
-            raise
+            raise Exception(f"Exception in {func.__name__}: {e}")
     return wrapper
 
 @log_function_entry_exit
@@ -28,44 +32,34 @@ def preprocess_corpus(corpus):
     try:
         cleaned_text = re.sub(r'[^\w\s]', '', corpus)
         tokens = word_tokenize(cleaned_text.lower())
-        logging.info(f"Preprocessed {len(tokens)} tokens.")
+        print(f"Preprocessed {len(tokens)} tokens.")
         return tokens
     except Exception as e:
-        logging.exception(f"Error in preprocess_corpus: {e}")
-        raise
+        raise Exception(f"Error in preprocess_corpus: {e}")
 
 @log_function_entry_exit
 def build_bigram_model(tokens, smoothing_factor=1):
-    logging.info("Starting build_bigram_model")
+    print("Starting build_bigram_model")
     try:
-        bigrams = list(nltk.bigrams(tokens))
-        bigram_counts = defaultdict(lambda: defaultdict(int))
+        bigram_counts = Counter(zip(tokens, tokens[1:]))
         vocab = set(tokens)
         vocab_size = len(vocab)
 
-        num_bigrams = len(bigrams)
-        processed_bigrams = 0
-        for i, (w1, w2) in enumerate(bigrams):
-            bigram_counts[w1][w2] += 1
-            processed_bigrams += 1
-            if processed_bigrams % 10000 == 0:  # Log progress every 10000 bigrams
-                logging.info(f"Processed {processed_bigrams}/{num_bigrams} bigrams ({processed_bigrams/num_bigrams:.2%})")
+        total_counts = Counter(tokens)
 
-        bigram_probs = defaultdict(lambda: defaultdict(float))
-        for w1 in bigram_counts:
-            total_count = sum(bigram_counts[w1].values()) + (smoothing_factor * vocab_size)
-            for w2 in vocab:
-                bigram_probs[w1][w2] = (bigram_counts[w1][w2] + smoothing_factor) / total_count
-                logging.debug(f"Calculated probability: [{w1} -> {w2}]: {bigram_probs[w1][w2]}")
+        bigram_probs = {}
+        for (w1, w2), count in bigram_counts.items():
+            if w1 not in bigram_probs:
+                bigram_probs[w1] = {}
+            bigram_probs[w1][w2] = (count + smoothing_factor) / (total_counts[w1] + smoothing_factor * vocab_size)
 
         return bigram_probs, vocab_size
     except Exception as e:
-        logging.exception(f"Error in build_bigram_model: {e}")
+        print(f"Error in build_bigram_model: {e}")
         raise
     finally:
-        logging.info("Exiting build_bigram_model")
+        print("Exiting build_bigram_model")
 
-@log_function_entry_exit
 def generate_sentence(bigram_model, start_word, max_length=20, unk_token="<UNK>"):
     try:
         sentence = [start_word]
@@ -82,7 +76,7 @@ def generate_sentence(bigram_model, start_word, max_length=20, unk_token="<UNK>"
                 break
         return sentence
     except Exception as e:
-        logging.exception(f"Error in generate_sentence: {e}")
+        print(f"Error in generate_sentence: {e}")
         raise
 
 @log_function_entry_exit
@@ -91,56 +85,46 @@ def evaluate_test_set(bigram_probs, test_set, vocab_size):
         sentence_probs = []
         for sentence in test_set:
             if len(sentence) < 2:
-                logging.info("Skipping sentence with less than 2 words")
+                print("Skipping sentence with less than 2 words")
                 continue
 
             sentence_prob = 1.0
             for i in range(1, len(sentence)):
                 second_word = sentence[i]
                 first_word = sentence[i - 1]
-                logging.debug(f"Evaluating bigram: [{first_word} -> {second_word}]")
+                print(f"Evaluating bigram: [{first_word} -> {second_word}]")
 
                 cond_prob = bigram_probs[first_word].get(second_word, 1 / vocab_size)
                 sentence_prob *= cond_prob
-                logging.debug(f"Conditional probability: {cond_prob}")
+                print(f"Conditional probability: {cond_prob}")
 
             sentence_probs.append(sentence_prob)
-            logging.info(f"Sentence probability: {sentence_prob}")
+            print(f"Sentence probability: {sentence_prob}")
 
         avg_prob = np.mean(sentence_probs)
         std_dev = np.std(sentence_probs)
 
         return avg_prob, std_dev
     except Exception as e:
-        logging.exception(f"Error in evaluate_test_set: {e}")
-        raise
+        raise Exception(f"Error in evaluate_test_set: {e}")
 
 @log_function_entry_exit
 def build_trigram_model(tokens, smoothing_factor=1):
     try:
-        trigrams = list(nltk.trigrams(tokens))
-        trigram_counts = defaultdict(lambda: defaultdict(lambda: defaultdict(int)))
+        trigram_counts = Counter(zip(tokens, tokens[1:], tokens[2:]))
         vocab = set(tokens)
         vocab_size = len(vocab)
 
-        for w1, w2, w3 in trigrams:
-            trigram_counts[w1][w2][w3] += 1
-            logging.debug(f"Trigram count [{w1} -> {w2} -> {w3}]: {trigram_counts[w1][w2][w3]}")
+        bigram_counts = Counter(zip(tokens, tokens[1:]))
 
         trigram_probs = defaultdict(lambda: defaultdict(lambda: defaultdict(float)))
-        for w1 in trigram_counts:
-            for w2 in trigram_counts[w1]:
-                total_count = sum(trigram_counts[w1][w2].values()) + (smoothing_factor * vocab_size)
-                for w3 in vocab:
-                    trigram_probs[w1][w2][w3] = (trigram_counts[w1][w2][w3] + smoothing_factor) / total_count
-                    logging.debug(f"Trigram probability [{w1} -> {w2} -> {w3}]: {trigram_probs[w1][w2][w3]}")
+        for (w1, w2, w3), count in trigram_counts.items():
+            trigram_probs[w1][w2][w3] = (count + smoothing_factor) / (bigram_counts[(w1, w2)] + smoothing_factor * vocab_size)
 
         return trigram_probs, vocab_size
     except Exception as e:
-        logging.exception(f"Error in build_trigram_model: {e}")
-        raise
+        raise Exception(f"Error in build_trigram_model: {e}")
 
-@log_function_entry_exit
 def generate_sentence_trigram(trigram_model, start_bigram, max_length=20, unk_token="<UNK>"):
     try:
         sentence = list(start_bigram)
@@ -157,8 +141,7 @@ def generate_sentence_trigram(trigram_model, start_bigram, max_length=20, unk_to
                 break
         return sentence
     except Exception as e:
-        logging.exception(f"Error in generate_sentence_trigram: {e}")
-        raise
+        raise Exception(f"Error in generate_sentence_trigram: {e}")
 
 @log_function_entry_exit
 def evaluate_test_set_trigram(trigram_probs, test_set, vocab_size):
@@ -166,7 +149,7 @@ def evaluate_test_set_trigram(trigram_probs, test_set, vocab_size):
         sentence_probs = []
         for sentence in test_set:
             if len(sentence) < 3:
-                logging.info("Skipping sentence with less than 3 words")
+                print("Skipping sentence with less than 3 words")
                 continue
 
             sentence_prob = 1.0
@@ -174,22 +157,21 @@ def evaluate_test_set_trigram(trigram_probs, test_set, vocab_size):
                 third_word = sentence[i]
                 second_word = sentence[i - 1]
                 first_word = sentence[i - 2]
-                logging.debug(f"Evaluating trigram: [{first_word} -> {second_word} -> {third_word}]")
+                print(f"Evaluating trigram: [{first_word} -> {second_word} -> {third_word}]")
 
                 cond_prob = trigram_probs[first_word][second_word].get(third_word, 1 / vocab_size)
                 sentence_prob *= cond_prob
-                logging.debug(f"Conditional probability: {cond_prob}")
+                print(f"Conditional probability: {cond_prob}")
 
             sentence_probs.append(sentence_prob)
-            logging.info(f"Sentence probability: {sentence_prob}")
+            print(f"Sentence probability: {sentence_prob}")
 
         avg_prob = np.mean(sentence_probs)
         std_dev = np.std(sentence_probs)
 
         return avg_prob, std_dev
     except Exception as e:
-        logging.exception(f"Error in evaluate_test_set_trigram: {e}")
-        raise
+        raise Exception(f"Error in evaluate_test_set_trigram: {e}")
 
 @log_function_entry_exit
 def calculate_perplexity(bigram_probs, test_set, vocab_size):
@@ -208,24 +190,22 @@ def calculate_perplexity(bigram_probs, test_set, vocab_size):
         perplexity = (vocab_size ** (1.0 / len(test_set))) / total_prob
         return perplexity
     except Exception as e:
-        logging.exception(f"Error in calculate_perplexity: {e}")
-        raise
+        raise Exception(f"Error in calculate_perplexity: {e}")
 
 try:
     with open("eng_news_2019_10K-sentences.txt", "r") as f:
         corpus = f.read()
-    logging.info("Corpus loaded successfully.")
+    print("Corpus loaded successfully.")
 except Exception as e:
-    logging.exception(f"Error reading corpus file: {e}")
-    raise
+    raise Exception(f"Error reading corpus file: {e}")
 
 tokens = preprocess_corpus(corpus)
 
 split_index = int(0.5 * len(tokens))
 train_tokens = tokens[:split_index]
 test_tokens = tokens[split_index:]
-logging.info(f"Training set size: {len(train_tokens)}")
-logging.info(f"Test set size: {len(test_tokens)}")
+print(f"Training set size: {len(train_tokens)}")
+print(f"Test set size: {len(test_tokens)}")
 
 bigram_probs, vocab_size = build_bigram_model(train_tokens)
 trigram_probs, vocab_size_trigram = build_trigram_model(train_tokens)
@@ -233,43 +213,43 @@ trigram_probs, vocab_size_trigram = build_trigram_model(train_tokens)
 for i in range(10):
     try:
         generated_sentence = generate_sentence(bigram_probs, "the", vocab_size)
-        logging.info(f"Generated sentence {i+1} (Bigram): {' '.join(generated_sentence)}")
+        print(f"Generated sentence {i+1} (Bigram): {' '.join(generated_sentence)}\n\n")
     except Exception as e:
-        logging.exception(f"Error generating sentence: {e}")
+        raise Exception(f"Error generating sentence: {e}")
 
 for i in range(10):
     try:
         generated_sentence_trigram = generate_sentence_trigram(trigram_probs, ("the", "economy"), vocab_size_trigram)
-        logging.info(f"Generated sentence {i+1} (Trigram): {' '.join(generated_sentence_trigram)}")
+        print(f"Generated sentence {i+1} (Trigram): {' '.join(generated_sentence_trigram)}\n\n")
     except Exception as e:
-        logging.exception(f"Error generating sentence: {e}")
+        raise Exception(f"Error generating sentence: {e}")
 
 test_set = [["the", "weather", "is", "sunny"], ["the", "economy", "is", "booming"]]
 try:
     avg_prob, std_dev = evaluate_test_set(bigram_probs, test_set, vocab_size)
-    logging.info(f"Average Probability (Provided Test Set - Bigram): {avg_prob}")
-    logging.info(f"Standard Deviation (Provided Test Set - Bigram): {std_dev}")
+    print(f"Average Probability (Provided Test Set - Bigram): {avg_prob}")
+    print(f"Standard Deviation (Provided Test Set - Bigram): {std_dev}")
 except Exception as e:
-    logging.exception(f"Error evaluating provided test set: {e}")
+    raise Exception(f"Error evaluating provided test set: {e}")
 
 curated_test_set = [["artificial", "intelligence", "revolution"]]
 try:
     avg_prob, std_dev = evaluate_test_set(bigram_probs, curated_test_set, vocab_size)
-    logging.info(f"Average Probability (Curated Test Set - Bigram): {avg_prob}")
-    logging.info(f"Standard Deviation (Curated Test Set - Bigram): {std_dev}")
+    print(f"Average Probability (Curated Test Set - Bigram): {avg_prob}")
+    print(f"Standard Deviation (Curated Test Set - Bigram): {std_dev}")
 except Exception as e:
-    logging.exception(f"Error evaluating curated test set: {e}")
+    raise Exception(f"Error evaluating curated test set: {e}")
 
 try:
     avg_prob, std_dev = evaluate_test_set_trigram(trigram_probs, test_set, vocab_size_trigram)
-    logging.info(f"Average Probability (Provided Test Set - Trigram): {avg_prob}")
-    logging.info(f"Standard Deviation (Provided Test Set - Trigram): {std_dev}")
+    print(f"Average Probability (Provided Test Set - Trigram): {avg_prob}")
+    print(f"Standard Deviation (Provided Test Set - Trigram): {std_dev}")
 except Exception as e:
-    logging.exception(f"Error evaluating provided test set: {e}")
+    raise Exception(f"Error evaluating provided test set: {e}")
 
 try:
     avg_prob, std_dev = evaluate_test_set_trigram(trigram_probs, curated_test_set, vocab_size_trigram)
-    logging.info(f"Average Probability (Curated Test Set - Trigram): {avg_prob}")
-    logging.info(f"Standard Deviation (Curated Test Set - Trigram): {std_dev}")
+    print(f"Average Probability (Curated Test Set - Trigram): {avg_prob}")
+    print(f"Standard Deviation (Curated Test Set - Trigram): {std_dev}")
 except Exception as e:
-    logging.exception(f"Error evaluating curated test set: {e}")
+    raise Exception(f"Error evaluating curated test set: {e}")
