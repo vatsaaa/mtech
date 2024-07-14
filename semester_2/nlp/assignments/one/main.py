@@ -2,7 +2,6 @@ from collections import defaultdict, Counter
 import logging
 import nltk
 import re
-from nltk.tokenize import word_tokenize
 from random import choice, choices
 import numpy
 
@@ -194,6 +193,7 @@ def evaluate_test_set(probs_dict, test_set, vocab_size, n):
 
                 if context not in probs_dict or word not in probs_dict[context]:
                     # Handle unseen n-grams: use Laplace smoothing
+                    print(f"Unseen n-gram: {context} -> {word}")
                     cond_prob = 1 / vocab_size
                 else:
                     cond_prob = probs_dict[context][word]
@@ -204,9 +204,13 @@ def evaluate_test_set(probs_dict, test_set, vocab_size, n):
             print(f"Sentence probability: {sentence_prob}")
 
         avg_prob = numpy.mean(sentence_probs)
-        std_dev = numpy.std(sentence_probs)
+        std_dev = numpy.std(sentence_probs, ddof=1) if len(sentence_probs) > 1 else 0.0
 
-        return avg_prob, std_dev
+        print(f"Number of sentences evaluated: {len(sentence_probs)}")
+        print(f"Average Probability: {avg_prob}")
+        print(f"Standard Deviation: {std_dev}")
+
+        return float(avg_prob), float(std_dev)
 
     except Exception as e:
         raise Exception(f"Error in evaluate_test_set: {e}")

@@ -38,3 +38,23 @@
 - **Context Sensitivity**: The increasing performance from unigram to bigram to trigram models highlights the significance of context in language modeling. Trigram models, by considering three-word sequences, can capture more nuanced dependencies in natural language, leading to better predictive performance.
 
 - **Data Sensitivity**: The different probabilities for the provided and curated test sets suggest that model performance can vary depending on the characteristics of the test data used. This underscores the importance of diverse and representative datasets in training and evaluating language models.
+
+### Increasing test set variability
+
+Increasing test set variability involves ensuring that the sentences in test set covers a diverse range of language patterns, contexts, and topics. To increase the variability of the test set, we need to consider the following strategies:
+
+- **Diverse Sentence Sources**: Gather sentences from a wide range of sources such as news articles, books, scientific papers, social media posts, etc. Each source typically has its own style and vocabulary, contributing to variability.
+
+- **Topic Diversity**: Ensure that the test set covers a variety of topics. This can include politics, technology, sports, entertainment, etc. Different topics often have distinct language usage and terminology.
+
+- **Sentence Length and Complexity**: Include sentences of varying lengths and complexities. Some sentences may be short and simple, while others may be long and intricate, with clauses and complex structures.
+
+- **Stylistic Variations**: Incorporate sentences with different stylistic elements, such as formal versus informal language, narrative versus descriptive styles, or technical versus conversational tones.
+
+- **Grammar and Syntax**: Include sentences that vary in grammar and syntax. This can include different sentence structures (simple, compound, complex), varied use of punctuation, and syntactic complexity.
+
+- **Rare Words and Phrases**: Introduce sentences that contain uncommon or domain-specific vocabulary. This challenges the model to handle unknown words and contexts gracefully.
+
+- **Special Cases and Edge Scenarios**: Include sentences that test specific edge cases or scenarios, such as ambiguous meanings, idiomatic expressions, or linguistic phenomena like sarcasm or humor.
+
+- **Cross-domain Testing**: If applicable, test your model across different domains or genres (e.g., comparing performance on news articles versus social media posts).
