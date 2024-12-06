@@ -1,0 +1,60 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pyzw
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+env.bak/
+env1/
+env2/
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# Dependency directories
+lib/
+libs/
+library/
+libraries/
+bin/
+build/
+dist/
+egg-info/
+eggs/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+*.whl
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+*.hdf5
+
+# Compiled files
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Miscellaneous
+*.bak
+*.swp
+*.tmp
+*.temp
+.DS_Store
+Thumbs.db

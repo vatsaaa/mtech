@@ -1,0 +1,42 @@
+We have a graph of nodes, where we perform a tree search. 
+There are 2 goal nodes, G1 and G2. 
+E is a successor of itself. A is the initial node. 
+G1 and G2 are the destination nodes, depicted with double circles.
+
+The following direct node paths are valid, there are no other direct paths between the nodes:
+A to B
+A to C
+B to C
+C to E
+E to E
+C to D
+D to G1
+D to G2
+
+StepCosts( ) from one node to the other are given below. 
+StepCosts( ) takes "from-node" as first parameter and second parameter can only the very next "successor-node". 
+StepCost(A, B) = 4
+StepCost(A to C) = 10
+StepCost(B to C) = 3
+StepCost(C to E) = 6
+StepCost(E to E) = 10
+StepCost(C to D) = 10
+StepCost(D to G1) = 6
+StepCost(D to G2) = 5
+
+StepCost( ) outputs the cost of going from "from-node" to "successor-node"; as given above.
+
+Heuristic values for each node are mentioned on the node as below: 
+h(A) = 21, h(B) = 18, h(C) = 15, h(D) = 5, h(E) = 4, h(G1)= 0, h(G2) = 0 
+
+Once the graph is analysed, please say "READY". I will ask the questions.
+
+
+DFS = 26
+GBFS = 26
+UCS = 22
+A* = 22
+Breadth First Search = 26
+IDS = 26
+
+

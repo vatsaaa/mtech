@@ -1,0 +1,29 @@
+# Python cache files
+__pycache__/
+
+# Python distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environment
+venv/
+.env/
+
+# IDE specific files
+.vscode/
+.idea/
+
+# Compiled Python files
+*.pyc
+*.pyo
+*.pyd
+
+# Logs
+*.log
+
+# Miscellaneous
+*.bak
+*.swp
+*.tmp
+.DS_Store

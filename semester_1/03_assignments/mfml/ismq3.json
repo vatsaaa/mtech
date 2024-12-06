@@ -1,0 +1,54 @@
+{
+    "Q3": [
+        {
+            "Face": "1",
+            "Frequency": "30"
+        },
+        {
+            "Face": "2",
+            "Frequency": "25"
+        },
+        {
+            "Face": "3",
+            "Frequency": "18"
+        },
+        {
+            "Face": "4",
+            "Frequency": "10"
+        },
+        {
+            "Face": "5",
+            "Frequency": "22"
+        },
+        {
+            "Face": "6",
+            "Frequency": "15"
+        }
+    ],
+    "Q4": [
+        {
+            "Detergent": "A",
+            "Clothes Count": "5",
+            "Whiteness Readings": [77, 81, 61, 76, 69]
+        },
+        {
+            "Detergent": "B",
+            "Clothes Count": "3",
+            "Whiteness Readings": [74, 66, 58]
+        },
+        {
+            "Detergent": "C",
+            "Clothes Count": "5",
+            "Whiteness Readings": [73, 78, 57, 69, 63]
+        },
+        {
+            "Detergent": "D",
+            "Clothes Count": "4",
+            "Whiteness Readings": [76, 85, 77, 64]
+        }
+    ]
+
+
+
+
+}
