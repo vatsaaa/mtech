@@ -1,0 +1,32 @@
+Case Name,Court,Year,Legal Principle,Citation,Outcome
+Marbury v. Madison,Supreme Court,1803,Judicial Review,5 U.S. 137,Established judicial review power
+Brown v. Board of Education,Supreme Court,1954,Equal Protection,347 U.S. 483,Overturned separate but equal doctrine
+Miranda v. Arizona,Supreme Court,1966,Self-Incrimination,384 U.S. 436,Required Miranda warnings
+Roe v. Wade,Supreme Court,1973,Privacy Rights,410 U.S. 113,Established abortion rights framework
+Gideon v. Wainwright,Supreme Court,1963,Right to Counsel,372 U.S. 335,Guaranteed counsel for indigent defendants
+Mapp v. Ohio,Supreme Court,1961,Fourth Amendment,367 U.S. 643,Applied exclusionary rule to states
+Griswold v. Connecticut,Supreme Court,1965,Privacy Rights,381 U.S. 479,Recognized right to privacy
+New York Times v. Sullivan,Supreme Court,1964,First Amendment,376 U.S. 254,Established actual malice standard
+Terry v. Ohio,Supreme Court,1968,Fourth Amendment,392 U.S. 1,Allowed stop and frisk procedures
+Katz v. United States,Supreme Court,1967,Fourth Amendment,389 U.S. 347,Established expectation of privacy test
+Palsgraf v. Long Island Railroad,New York Court of Appeals,1928,Negligence,248 N.Y. 339,Defined proximate cause in tort law
+Carlill v. Carbolic Smoke Ball Co,Court of Appeal,1893,Contract Formation,1 Q.B. 256,Unilateral contract principles
+Hadley v. Baxendale,Court of Exchequer,1854,Contract Damages,9 Ex. 341,Established foreseeability rule for damages
+Rylands v. Fletcher,House of Lords,1868,Strict Liability,L.R. 3 H.L. 330,Created strict liability for abnormally dangerous activities
+Donoghue v. Stevenson,House of Lords,1932,Negligence,A.C. 562,Established modern negligence principles
+Pennoyer v. Neff,Supreme Court,1877,Jurisdiction,95 U.S. 714,Personal jurisdiction requirements
+International Shoe v. Washington,Supreme Court,1945,Jurisdiction,326 U.S. 310,Minimum contacts test for jurisdiction
+Erie Railroad v. Tompkins,Supreme Court,1938,Federal Courts,304 U.S. 64,Federal courts must apply state law
+Chevron v. NRDC,Supreme Court,1984,Administrative Law,467 U.S. 837,Deference to agency interpretation
+Youngstown v. Sawyer,Supreme Court,1952,Executive Power,343 U.S. 579,Limited presidential power during wartime
+McCulloch v. Maryland,Supreme Court,1819,Federal Power,17 U.S. 316,Necessary and proper clause interpretation
+Gibbons v. Ogden,Supreme Court,1824,Commerce Clause,22 U.S. 1,Federal commerce power over interstate trade
+Lochner v. New York,Supreme Court,1905,Due Process,198 U.S. 45,Economic substantive due process
+West Coast Hotel v. Parrish,Supreme Court,1937,Due Process,300 U.S. 379,Rejected economic substantive due process
+United States v. Carolene Products,Supreme Court,1938,Equal Protection,304 U.S. 144,Established levels of constitutional scrutiny
+Korematsu v. United States,Supreme Court,1944,Equal Protection,323 U.S. 214,Upheld Japanese internment during WWII
+Loving v. Virginia,Supreme Court,1967,Equal Protection,388 U.S. 1,Struck down antimiscegenation laws
+Reed v. Reed,Supreme Court,1971,Equal Protection,404 U.S. 71,First case applying heightened scrutiny to gender
+Craig v. Boren,Supreme Court,1976,Equal Protection,429 U.S. 190,Intermediate scrutiny for gender classifications
+Regents v. Bakke,Supreme Court,1978,Equal Protection,438 U.S. 265,Affirmative action in education
+Grutter v. Bollinger,Supreme Court,2003,Equal Protection,539 U.S. 306,Diversity as compelling interest in education

@@ -1,0 +1,21 @@
+Property Type,Legal Description,Owner Rights,Transfer Methods,Restrictions,Market Value
+Fee Simple Absolute,Complete ownership with unlimited duration,Full ownership rights including use disposition and inheritance,Sale gift inheritance,None except governmental regulations,$500000
+Life Estate,Ownership limited to lifetime of designated person,Use and possession during life term,Cannot transfer beyond life interest,Terminates upon death of life tenant,$200000
+Leasehold Estate,Temporary possession under rental agreement,Use and possession for specified term,Assignment and subletting with restrictions,Subject to lease terms and landlord rights,$1500
+Easement Appurtenant,Right to use another's land for specific purpose,Limited use for stated purpose only,Transfers with dominant estate,Must not interfere with servient estate use,$25000
+Easement in Gross,Personal right to use another's land,Personal use rights only,Generally not transferable,Limited to grantor's specified use,$15000
+Covenant Real,Promise regarding land use running with title,Bound by covenant terms,Transfers with property,Must comply with covenant requirements,$0
+Fee Simple Determinable,Ownership that automatically ends upon specified event,Full ownership subject to condition,Same as fee simple until condition occurs,Automatic forfeiture upon condition breach,$400000
+Fee Simple Subject to Condition Subsequent,Ownership subject to right of entry for breach,Full ownership until right exercised,Normal transfer until condition broken,Right of entry must be exercised,$450000
+Joint Tenancy,Co-ownership with right of survivorship,Equal ownership shares with survivorship rights,Sale severs joint tenancy,Cannot devise share by will,$300000
+Tenancy in Common,Co-ownership without survivorship rights,Ownership in specified shares,Can transfer individual shares,No survivorship rights,$250000
+Tenancy by Entirety,Marital co-ownership with survivorship,Joint ownership by married couple only,Both spouses must consent to transfer,Creditor protection benefits,$350000
+Community Property,Marital property owned equally by spouses,Equal ownership of marital acquisitions,Joint management and control,Separate property remains individual,$400000
+Trust Property,Legal title held by trustee for beneficiaries,Trustee holds legal title beneficiaries hold equitable,Transfer according to trust terms,Must comply with trust purposes,$600000
+Condominium,Individual ownership of unit plus common area interest,Ownership of unit and common area share,Individual unit transfer,Homeowner association rules apply,$275000
+Cooperative,Corporate ownership with proprietary lease rights,Shareholder rights in cooperative corporation,Transfer of shares and lease rights,Board approval typically required,$225000
+Timeshare,Shared ownership of property for specified periods,Use rights during designated time periods,Transfer of time period interests,Use limited to specified times,$50000
+Mineral Rights,Ownership of subsurface minerals separate from surface,Right to extract and profit from minerals,Can be severed from surface rights,Environmental regulations apply,$100000
+Water Rights,Right to use water from specified source,Use of water according to legal doctrine,Transfer according to state law,Priority system and beneficial use requirements,$75000
+Air Rights,Ownership of space above property,Development rights in airspace above property,Transfer separate from surface rights,Height and zoning restrictions,$200000
+Development Rights,Right to develop property beyond current use,Right to increase density or change use,Can be transferred or sold separately,Zoning and environmental compliance required,$150000

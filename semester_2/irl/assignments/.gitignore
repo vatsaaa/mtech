@@ -1,0 +1,210 @@
+# Legal Information Retrieval System - .gitignore
+# ================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+.virtualenv/
+
+# IDE and Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pytest
+.pytest_cache/
+.coverage
+htmlcov/
+
+# mypy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Logs
+*.log
+logs/
+log/
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+tmp/
+
+# Backup files
+*.bak
+*.backup
+*~
+*.orig
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# Document processing temporary files
+~$*.docx
+~$*.doc
+~$*.pptx
+~$*.ppt
+~$*.xlsx
+~$*.xls
+
+# Output files (optional - uncomment if you don't want to track results)
+# results/
+# output/
+# reports/
+
+# Large datasets (uncomment if you have large data files)
+# *.csv
+# *.json
+# data/
+# datasets/
+
+# Model files (if any machine learning models are generated)
+*.pkl
+*.pickle
+*.joblib
+*.h5
+*.model
+
+# Environment variables
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Node.js (if you add any frontend components)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Additional Python patterns
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Documentation build
+docs/_build/
+site/
+
+# PyCharm
+.idea/
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# mypy type checker
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Project-specific ignores
+# =======================
+
+# Assignment submission files (keep only final versions)
+*_backup.py
+*_old.py
+*_copy.py
+*_temp.py
+
+# Test outputs
+test_results/
+correction_logs/
+
+# Performance benchmarks
+benchmarks/
+profiling/
+
+# Cache directories
+.cache/
+cache/
+
+# Configuration files with sensitive data
+config.ini
+settings.ini
+secrets.json
+
+# Database files (if any are created)
+*.db
+*.sqlite
+*.sqlite3
+
+# Generated documentation
+*.pdf.bak
+*.docx.bak
+
+# Compressed files
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# End of .gitignore
