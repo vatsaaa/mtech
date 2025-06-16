@@ -7,6 +7,28 @@ __pycache__/
 # Ignore data files/directories
 data
 
+# Archive files
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.tar.bz2
+*.tbz2
+*.tar.xz
+*.txz
+*.rar
+*.7z
+*.gz
+*.bz2
+*.xz
+*.Z
+*.lz
+*.lzma
+*.lzo
+*.rz
+*.sz
+*.dz
+
 # PyCharm files
 .idea/
 
