@@ -4,6 +4,9 @@ __pycache__/
 # Ignore .venv directory
 .venv/
 
+# Ignore data files/directories
+data
+
 # PyCharm files
 .idea/
 
