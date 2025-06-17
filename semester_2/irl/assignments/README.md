@@ -657,28 +657,11 @@ Suitable for academic research in:
 - **Human-Computer Interaction**: User interface design for professional legal tools
 
 ---
-
-## 📞 Contact & References
-
-### Project Information
-- **Team**: Group 65
-- **Assignment**: IRL Assignment 01 PS07  
-- **Institution**: BITS Pilani
-- **Course**: Information Retrieval and Logic
-- **Date**: June 2025
-
 ### Academic References
 - **Levenshtein Distance Algorithm**: Classic edit distance computation with dynamic programming
 - **Legal Information Retrieval Systems**: Westlaw and LexisNexis as primary use case examples
 - **Domain-Specific Spell Correction**: Techniques for specialized vocabulary optimization
 - **Legal Terminology and Common Misspellings**: Analysis of error patterns in legal document processing
-
-### Technical Documentation
-- **README.md**: This comprehensive documentation
-- **README_APPLICATION.md**: Application-specific documentation
-- **PROJECT_SUMMARY.md**: Detailed project summary and technical report
-- **Code Documentation**: Extensive inline comments and docstrings
-
 ---
 
 ## 📄 License & Usage
