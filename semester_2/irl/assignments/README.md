@@ -81,14 +81,11 @@ This project implements a comprehensive Legal Information Retrieval System that 
 
 ```
 IRL_Assignment_01_PS07/
-├── IRL_Group_65_Assignment_01_PS07.ipynb        # Jupyter notebook implementation
-├── legal_spell_checker.py                      # Standalone Python application
-├── demo.py                                     # Quick demonstration script
+├── IRL_Group_65_Assignment_01_PS07.ipynb       # Jupyter notebook implementation
+├── IRL_Group_65_Assignment_01_PS07.py          # Standalone Python application
 ├── legal_terms.txt                             # Legal terms dictionary (670+ terms)
 ├── requirements.txt                            # Python dependencies
 ├── README.md                                   # This comprehensive documentation
-├── README_APPLICATION.md                       # Application-specific documentation
-├── PROJECT_SUMMARY.md                          # Detailed project summary
 ├── sample_documents/                           # Sample legal documents (10 files)
 │   ├── contract_law_basics.txt                # Contract law content
 │   ├── criminal_procedure.txt                 # Criminal procedure content
@@ -173,19 +170,19 @@ python3.7+
 #### Option 1: Standalone Python Application (Recommended)
 ```bash
 # Run interactive mode
-python legal_spell_checker.py --interactive
+python IRL_Group_65_Assignment_01_PS07.py --interactive
 
 # Run batch testing on predefined misspellings
-python legal_spell_checker.py --batch-test
+python IRL_Group_65_Assignment_01_PS07.py --batch-test
 
 # Check single word with detailed analysis
-python legal_spell_checker.py --word "plentiff" --detailed
+python IRL_Group_65_Assignment_01_PS07.py --word "plentiff" --detailed
 
 # Use custom dictionary file
-python legal_spell_checker.py --dict-file "custom_legal_terms.txt" --interactive
+python IRL_Group_65_Assignment_01_PS07.py --dict-file "custom_legal_terms.txt" --interactive
 
 # Export results to JSON
-python legal_spell_checker.py --batch-test --export "results.json"
+python IRL_Group_65_Assignment_01_PS07.py --batch-test --export "results.json"
 
 # Quick demo
 python demo.py
@@ -203,7 +200,7 @@ jupyter notebook IRL_Group_65_Assignment_01_PS07.ipynb
 ### Command Line Options (Standalone Application)
 
 ```
-usage: legal_spell_checker.py [-h] [--dict-file DICT_FILE] [--interactive] 
+usage: IRL_Group_65_Assignment_01_PS07.py [-h] [--dict-file DICT_FILE] [--interactive] 
                               [--batch-test] [--word WORD] [--detailed] 
                               [--export EXPORT]
 
@@ -686,7 +683,7 @@ Suitable for academic research in:
 
 ## 📄 License & Usage
 
-This project is developed for academic purposes as part of the Information Retrieval and Logic course. The implementation demonstrates advanced concepts in:
+This project is developed for academic purposes as part of the Information Retrieval course. The implementation demonstrates advanced concepts in:
 
 - **Edit Distance Algorithms**: Standard Levenshtein vs. Weighted approaches
 - **Domain-Specific Optimization**: Custom weights for legal terminology
@@ -704,6 +701,3 @@ Feel free to use this implementation as a reference for:
 - Studying comparative algorithm analysis methodologies
 
 ---
-
-**© 2025 Group 65 - Legal Information Retrieval System**
-**BITS Pilani - Information Retrieval and Logic Course**
