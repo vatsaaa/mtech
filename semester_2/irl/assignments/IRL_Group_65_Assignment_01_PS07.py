@@ -17,7 +17,6 @@ import warnings
 # Suppress warnings for cleaner output
 warnings.filterwarnings('ignore')
 
-
 class LegalTermDictionary:
     """
     Manages the legal term dictionary for spell correction in legal domain.
